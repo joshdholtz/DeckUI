@@ -32,14 +32,16 @@ public struct Presenter: View {
     
     let deck: Deck
     let slideDirection: SlideDirection
+    let loop: Bool
     
     @State var index = 0
     @State var isFullScreen = false
     @State var activeTransition: AnyTransition = .slideFromTrailing
     
-    public init(deck: Deck, slideDirection: SlideDirection = .horizontal) {
+    public init(deck: Deck, slideDirection: SlideDirection = .horizontal, loop: Bool = false) {
         self.deck = deck
         self.slideDirection = slideDirection
+        self.loop = loop
     }
     
     var slide: Slide? {
@@ -122,7 +124,9 @@ public struct Presenter: View {
         
         let slides = self.deck.slides()
         if self.index >= (slides.count - 1) {
-            self.index = 0
+            if self.loop {
+                self.index = 0
+            }
         } else {
             self.index += 1
         }
@@ -133,7 +137,9 @@ public struct Presenter: View {
         
         let slides = self.deck.slides()
         if self.index <= 0 {
-            self.index = slides.count - 1
+            if self.loop {
+                self.index = slides.count - 1
+            }
         } else {
             self.index -= 1
         }

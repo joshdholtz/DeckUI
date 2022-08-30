@@ -150,8 +150,7 @@ extension ContentView {
                     var body: some View {
                         Presenter(deck: self.deck)
                 
-                        // or Presenter(deck: self.deck, slideDirection: .horizontal)
-                        // or Presenter(deck: self.deck, slideDirection: .vertical)
+                        // or Presenter(deck: self.deck, slideDirection: .vertical, loop: true)
                     }
                 }
 
