@@ -8,13 +8,38 @@
 import SwiftUI
 
 public struct Presenter: View {
+    public enum SlideDirection {
+        case horizontal, vertical
+        
+        var next: AnyTransition {
+            switch self {
+            case .horizontal:
+                return .slideFromTrailing
+            case .vertical:
+                return .slideFromBottom
+            }
+        }
+        
+        var previous: AnyTransition {
+            switch self {
+            case .horizontal:
+                return .slideFromLeading
+            case .vertical:
+                return .slideFromTop
+            }
+        }
+    }
+    
     let deck: Deck
+    let slideDirection: SlideDirection
     
     @State var index = 0
     @State var isFullScreen = false
+    @State var activeTransition: AnyTransition = .slideFromTrailing
     
-    public init(deck: Deck) {
+    public init(deck: Deck, slideDirection: SlideDirection = .horizontal) {
         self.deck = deck
+        self.slideDirection = slideDirection
     }
     
     var slide: Slide? {
@@ -41,10 +66,9 @@ public struct Presenter: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
 //                        .transition(.move(edge: .bottom))
 //                        .transition(.scale)
-                        .transition(.backslide)
                         .zIndex(Double(self.index))
                 }
-            }
+            }.transition(self.activeTransition)
             
 //            if let slide = self.slide {
 //                slide.view
@@ -56,6 +80,7 @@ public struct Presenter: View {
 //                    .italic()
 //            }
         }
+        .navigationTitle(self.deck.title)
         .frame(width: 1280, height: 700)
         .if(!self.isFullScreen) {
             $0.toolbar {
@@ -93,6 +118,8 @@ public struct Presenter: View {
     }
     
     private func nextSlide() {
+        self.activeTransition = self.slideDirection.next
+        
         let slides = self.deck.slides()
         if self.index >= (slides.count - 1) {
             self.index = 0
@@ -102,6 +129,8 @@ public struct Presenter: View {
     }
     
     private func previousSlide() {
+        self.activeTransition = self.slideDirection.previous
+        
         let slides = self.deck.slides()
         if self.index <= 0 {
             self.index = slides.count - 1
@@ -111,10 +140,33 @@ public struct Presenter: View {
     }
 }
 extension AnyTransition {
-    static var backslide: AnyTransition {
+    static var slideFromBottom: AnyTransition {
+        AnyTransition.asymmetric(
+            insertion: .move(edge: .bottom),
+            removal: .move(edge: .top))
+        
+    }
+    
+    static var slideFromTop: AnyTransition {
+        AnyTransition.asymmetric(
+            insertion: .move(edge: .top),
+            removal: .move(edge: .bottom))
+        
+    }
+    
+    static var slideFromTrailing: AnyTransition {
         AnyTransition.asymmetric(
             insertion: .move(edge: .trailing),
-            removal: .move(edge: .leading))}
+            removal: .move(edge: .leading))
+        
+    }
+    
+    static var slideFromLeading: AnyTransition {
+        AnyTransition.asymmetric(
+            insertion: .move(edge: .leading),
+            removal: .move(edge: .trailing))
+        
+    }
 }
 
 extension View {
