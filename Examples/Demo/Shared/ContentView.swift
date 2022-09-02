@@ -48,6 +48,11 @@ extension ContentView {
             }
             
             Slide {
+                Title("Images")
+                Media(.bundleImage("bill-murray"))
+            }
+            
+            Slide {
                 Title("Multiple Columns")
                 
                 Columns {

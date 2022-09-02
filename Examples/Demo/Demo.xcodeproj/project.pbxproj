@@ -21,6 +21,8 @@
 		2C1190AB28BE86AA0038D4B9 /* DeckUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2C1190A628BE84D00038D4B9 /* DeckUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2C1190AD28BE86B40038D4B9 /* DeckUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C1190A828BE84D30038D4B9 /* DeckUI.framework */; };
 		2C1190AE28BE86B40038D4B9 /* DeckUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2C1190A828BE84D30038D4B9 /* DeckUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2C1190C128C1A7030038D4B9 /* bill-murray.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 2C1190C028C1A7030038D4B9 /* bill-murray.jpeg */; };
+		2C1190C228C1A82D0038D4B9 /* bill-murray.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 2C1190C028C1A7030038D4B9 /* bill-murray.jpeg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +82,7 @@
 		2C11908028BE84350038D4B9 /* Tests_macOSLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOSLaunchTests.swift; sourceTree = "<group>"; };
 		2C1190A628BE84D00038D4B9 /* DeckUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DeckUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C1190A828BE84D30038D4B9 /* DeckUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DeckUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C1190C028C1A7030038D4B9 /* bill-murray.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "bill-murray.jpeg"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				2C11905928BE84350038D4B9 /* Shared */,
+				2C1190BF28C1A7030038D4B9 /* Media */,
 				2C11906828BE84350038D4B9 /* macOS */,
 				2C11907128BE84350038D4B9 /* Tests iOS */,
 				2C11907D28BE84350038D4B9 /* Tests macOS */,
@@ -182,6 +186,14 @@
 				2C1190A628BE84D00038D4B9 /* DeckUI.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2C1190BF28C1A7030038D4B9 /* Media */ = {
+			isa = PBXGroup;
+			children = (
+				2C1190C028C1A7030038D4B9 /* bill-murray.jpeg */,
+			);
+			path = Media;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -311,6 +323,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C1190C128C1A7030038D4B9 /* bill-murray.jpeg in Resources */,
 				2C11908628BE84350038D4B9 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -319,6 +332,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C1190C228C1A82D0038D4B9 /* bill-murray.jpeg in Resources */,
 				2C11908728BE84350038D4B9 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -516,7 +530,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -546,7 +560,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
