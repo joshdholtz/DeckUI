@@ -25,9 +25,11 @@ extension ContentView {
                 Title("Introduction", subtitle: "What is it?")
                 Columns {
                     Column {
-                        Words("- A Swift DSL used to make slides")
-                        Words("- This is made for a future talk")
-                        Words("- Probably never production ready")
+                        Bullets(style: .bullet) {
+                            Words("A Swift DSL used to make slides")
+                            Words("This is made for a future talk")
+                            Words("Probably never production ready")
+                        }
                     }
                     Column {
                         Words("👈 So cool")
@@ -51,18 +53,32 @@ extension ContentView {
                 Columns {
                     Column {
                         Words("Left Side", style: .custom(Font.system(size: 40, weight: .bold)))
-                        Words("- Left")
-                        Words("- Twix")
-                        Words("- Is")
-                        Words("- Better")
+                        Bullets(style: .bullet) {
+                            Words("Left")
+                            Words("Twix")
+                            Words("Is")
+                            Words("Better")
+                        }
                     }
                     
                     Column {
                         Words("Right Side", style: .custom(Font.system(size: 40, weight: .bold)))
-                        Words("- Right")
-                        Words("- Twix")
-                        Words("- Is")
-                        Words("- Better")
+                        
+                        Code("""
+                        Slide {
+                            Title("Introduction")
+                            Columns {
+                                Column {
+                                    Words("- Super")
+                                    Words("- Duper")
+                                    Words("- Cool")
+                                }
+                                Column {
+                                    Words("👈 So cool")
+                                }
+                            }
+                        }
+                        """)
                     }
                 }
             }
@@ -78,7 +94,7 @@ extension ContentView {
                     }
 
                     Column {
-                        Words("""
+                        Code("""
                         struct CounterView: View {
                             @State var count = 0
 
@@ -90,59 +106,61 @@ extension ContentView {
                                 }
                             }
                         }
-                        """, style: .custom(Font.system(size: 14, design: .monospaced)))
+                        """)
                     }
                 }
             }
 
             Slide {
                 Title("Make Deck like...")
-                Words("""
-                Deck(title: "SomeConf 2023") {
-                    Slide(alignment: .center) {
-                        Title("Welcome to DeckUI")
-                    }
-
-                    Slide {
-                        Title("Introduction", subtitle: "What is it?")
-                        Columns {
-                            Column {
-                                Words("- A Swift DSL used to make slides")
-                                Words("- This is made for a future talk")
-                                Words("- Probably never production ready")
+                Columns {
+                    Column {
+                        Code("""
+                        Deck(title: "SomeConf 2023") {
+                            Slide(alignment: .center) {
+                                Title("Welcome to DeckUI")
                             }
-                            Column {
-                                Words("👈 So cool")
+
+                            Slide {
+                                Title("Introduction", subtitle: "What is it?")
+                                Columns {
+                                    Column {
+                                        Words("- A Swift DSL used to make slides")
+                                        Words("- This is made for a future talk")
+                                        Words("- Probably never production ready")
+                                    }
+                                    Column {
+                                        Words("👈 So cool")
+                                    }
+                                }
+                            }
+
+                            Slide(alignment: .center) {
+                                Title("Center alignment")
+                                Words("Slides can be center aligned")
+                            }
+
+                            Slide(alignment: .top) {
+                                Title("Top alignment")
+                                Words("Slides also be top aligned")
+                            }
+
+                            Slide {
+                                Title("Drop in any SwiftUI view")
+                                RawView {
+                                    CounterView()
+                                }
                             }
                         }
-                    }
-
-                    Slide(alignment: .center) {
-                        Title("Center alignment")
-                        Words("Slides can be center aligned")
-                    }
-
-                    Slide(alignment: .top) {
-                        Title("Top alignment")
-                        Words("Slides also be top aligned")
-                    }
-
-                    Slide {
-                        Title("Drop in any SwiftUI view")
-                        RawView {
-                            CounterView()
-                        }
+                        """)
                     }
                 }
-                """, style: .custom(Font.system(size: 14, design: .monospaced)))
-
-
             }
             
             Slide {
                 Title("Present like...")
                 
-                Words("""
+                Code("""
                 import SwiftUI
                 import DeckUI
                 
@@ -168,7 +186,7 @@ extension ContentView {
                         }
                     }
                 }
-                """, style: .custom(Font.system(size: 14, design: .monospaced)))
+                """)
             }
         }
     }
@@ -185,5 +203,3 @@ struct CounterView: View {
         }
     }
 }
-
-

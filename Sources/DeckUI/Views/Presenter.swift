@@ -116,6 +116,18 @@ public struct Presenter: View {
             } label: {
                 Label("Next", systemImage: "arrow.right")
             }.keyboardShortcut(.rightArrow, modifiers: [])
+            
+            Button {
+                NotificationCenter.default.post(name: .keyDown, object: nil)
+            } label: {
+                Label("Down", systemImage: "arrow.down")
+            }.keyboardShortcut(.downArrow, modifiers: [])
+            
+            Button {
+                NotificationCenter.default.post(name: .keyUp, object: nil)
+            } label: {
+                Label("Up", systemImage: "arrow.up")
+            }.keyboardShortcut(.upArrow, modifiers: [])
         }
     }
     
@@ -183,4 +195,9 @@ extension View {
             self
         }
     }
+}
+
+extension NSNotification.Name {
+    static let keyUp = NSNotification.Name("presenter_pressed_up")
+    static let keyDown = NSNotification.Name("presenter_pressed_down")
 }
