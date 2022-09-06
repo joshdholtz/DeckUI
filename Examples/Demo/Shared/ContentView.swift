@@ -57,7 +57,6 @@ extension ContentView {
                 
                 Columns {
                     Column {
-                        Words("Left Side", font: Font.system(size: 40, weight: .bold))
                         Bullets(style: .bullet) {
                             Words("Left")
                             Words("Twix")
@@ -67,8 +66,6 @@ extension ContentView {
                     }
                     
                     Column {
-                        Words("Right Side", font: Font.system(size: 40, weight: .bold))
-                        
                         Code("""
                         Slide {
                             Title("Introduction")
