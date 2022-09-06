@@ -30,18 +30,22 @@ public struct Presenter: View {
         }
     }
     
+    public typealias DefaultResolution = (width: Double, height: Double)
+    
     let deck: Deck
     let slideDirection: SlideDirection
     let loop: Bool
+    let defaultResolution: DefaultResolution
     
     @State var index = 0
     @State var isFullScreen = false
     @State var activeTransition: AnyTransition = .slideFromTrailing
     
-    public init(deck: Deck, slideDirection: SlideDirection = .horizontal, loop: Bool = false) {
+    public init(deck: Deck, slideDirection: SlideDirection = .horizontal, loop: Bool = false, defaultResolution: DefaultResolution = (width: 1920, height: 1080)) {
         self.deck = deck
         self.slideDirection = slideDirection
         self.loop = loop
+        self.defaultResolution = defaultResolution
     }
     
     var slide: Slide? {
@@ -53,7 +57,34 @@ public struct Presenter: View {
         }
     }
     
+    func scaleAmount(_ width: Double, _ height: Double) -> Double {
+        let widthScale = width / self.defaultResolution.width
+        let heightScale = height / self.defaultResolution.height
+        
+        let defaultResolution = self.defaultResolution.width / self.defaultResolution.height
+        let frameResolution = width / height
+        
+        if defaultResolution < frameResolution {
+            return heightScale
+        } else {
+            return widthScale
+        }
+    }
+    
     public var body: some View {
+        GeometryReader { proxy in
+            ZStack(alignment: .center) {
+                Color.black
+                
+                self.bodyContents
+                    .clipped()
+                    .frame(width: self.defaultResolution.0, height: self.defaultResolution.1, alignment: .center)
+                    .scaleEffect(self.scaleAmount(proxy.size.width, proxy.size.height), anchor: .center)
+            }.frame(minWidth: 100, maxWidth: .infinity, minHeight: 100, maxHeight: .infinity)
+        }
+    }
+    
+    private var bodyContents: some View {
         ZStack {
             if self.isFullScreen {
                 VStack {
@@ -64,26 +95,13 @@ public struct Presenter: View {
             ForEach(Array(self.deck.slides().enumerated()), id: \.offset) { index, slide in
                 
                 if index == self.index {
-                    slide.view
+                    slide.buildView(theme: self.deck.theme)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                        .transition(.move(edge: .bottom))
-//                        .transition(.scale)
                         .zIndex(Double(self.index))
                 }
             }.transition(self.activeTransition)
-            
-//            if let slide = self.slide {
-//                slide.view
-//                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                    .transition(.move(edge: .bottom))
-//                    .zIndex(Double(self.index))
-//            } else {
-//                Text("No slide...")
-//                    .italic()
-//            }
         }
         .navigationTitle(self.deck.title)
-        .frame(width: 1280, height: 700)
         .if(!self.isFullScreen) {
             $0.toolbar {
                 ToolbarItemGroup {

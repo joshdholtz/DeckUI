@@ -14,35 +14,39 @@ public struct Slide: Identifiable {
     let horizontalAlignment: HorizontalAlignment
     let padding: CGFloat
     let comment: String?
+    let theme: Theme?
     @ContentItemArrayBuilder var contentItems: () -> [ContentItem]
     
-    public init(alignment: Alignment = .topLeading, padding: CGFloat = 40, comment: String? = nil, @ContentItemArrayBuilder contentItems: @escaping () -> [ContentItem]) {
+    public init(alignment: Alignment = .topLeading, padding: CGFloat = 40, comment: String? = nil, theme: Theme? = nil, @ContentItemArrayBuilder contentItems: @escaping () -> [ContentItem]) {
         self.alignment = alignment
         self.horizontalAlignment = .leading
         self.padding = padding
         self.comment = comment
+        self.theme = theme
         self.contentItems = contentItems
     }
     
-    var things: [ContentItem] {
-        return contentItems()
-    }
-    
-    var thing: AnyView {
+    func buildContentItems(theme: Theme) -> AnyView {
+        let contentViews = contentItems()
         return AnyView(
-            ForEach(self.things, id: \.id) {
+            ForEach(contentViews, id: \.id) {
                 $0.view
             }
         )
     }
     
-    var view: AnyView {
+    func buildView(theme: Theme) -> AnyView {
+        let themeToUse = self.theme ?? theme
+        
+        let contentItemViews = self.buildContentItems(theme: themeToUse)
+        
         return AnyView(
             VStack(alignment: self.horizontalAlignment) {
-                thing
+                contentItemViews
             }
             .padding(self.padding)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: self.alignment)
+            .background(themeToUse.background)
         )
     }
 }
