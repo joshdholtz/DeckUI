@@ -15,15 +15,15 @@ public struct Columns: ContentItem {
         self.columns = columns
     }
     
-    @ViewBuilder
-    public var view: AnyView {
+    // TODO: Use theme
+    public func buildView(theme: Theme) -> AnyView {
         AnyView(
             GeometryReader { proxy in
                 HStack(alignment: .top, spacing: 0) {
                     ForEach(Array(self.columns().enumerated()), id: \.offset) { index, column in
                         // TODO: dont love this hardcoded
                         VStack(alignment: .leading) {
-                            column.thing
+                            column.buildView(theme: theme)
                         }.padding(.trailing, 20)
                             .frame(width: proxy.size.width / CGFloat(self.columns().count), alignment: .leading)
                     }
@@ -35,22 +35,21 @@ public struct Columns: ContentItem {
 
 public struct Column: Identifiable {
     public let id = UUID()
+    public let theme: Theme?
     
     @ContentItemArrayBuilder var contentItems: () -> [ContentItem]
     
-    var things: [ContentItem] {
-        return contentItems()
-    }
-    
-    var thing: AnyView {
+    public func buildView(theme: Theme) -> AnyView {
+        let contentItemViews = contentItems()
         return AnyView(
-            ForEach(self.things, id: \.id) {
-                $0.view
+            ForEach(contentItemViews, id: \.id) {
+                $0.buildView(theme: theme)
             }
         )
     }
     
-    public init(@ContentItemArrayBuilder contentItems: @escaping () -> [ContentItem]) {
+    public init(theme: Theme? = nil, @ContentItemArrayBuilder contentItems: @escaping () -> [ContentItem]) {
+        self.theme = theme
         self.contentItems = contentItems
     }
 }

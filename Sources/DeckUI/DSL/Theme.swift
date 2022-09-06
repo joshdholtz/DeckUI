@@ -12,34 +12,107 @@ public struct Theme {
     var title: Foreground
     var subtitle: Foreground
     var body: Foreground
+    
+    var code: Foreground
+    var codeHighlighted: (Color, Foreground)
+    
+    public init(background: Color, title: Foreground, subtitle: Foreground, body: Foreground, code: Foreground, codeHighlighted: (Color, Foreground)) {
+        self.background = background
+        self.title = title
+        self.subtitle = subtitle
+        self.body = body
+        self.code = code
+        self.codeHighlighted = codeHighlighted
+    }
 }
 
 public struct Foreground {
     let color: Color
     let font: Font
+    
+    public init(color: Color, font: Font) {
+        self.color = color
+        self.font = font
+    }
 }
 
 extension Theme {
-    public static let standard: Theme = .dark
+    public static let standard: Theme = .black
     
     public static let dark: Theme = Theme(
         background: Color(hex: "#221d29"),
         title: Foreground(
             color: Color(hex: "#FFFFFF"),
-            font: Font.system(size: 60, weight: .bold, design: .default)
+            font: Font.system(size: 80, weight: .bold, design: .default)
         ),
         subtitle: Foreground(
             color: Color(hex: "#FFFFFF"),
-            font: Font.system(size: 35, weight: .light, design: .default)
+            font: Font.system(size: 40, weight: .light, design: .default).italic()
         ),
         body: Foreground(
             color: Color(hex: "#FFFFFF"),
-            font: Font.system(size: 30, weight: .regular, design: .default)
-        )
+            font: Font.system(size: 40, weight: .regular, design: .default)
+        ),
+        code: Foreground(
+            color: Color(hex: "#FFFFFF"),
+            font: Font.system(size: 22, weight: .regular, design: .monospaced)
+        ),
+        codeHighlighted: (Color(hex: "#000000"), Foreground(
+            color: Color(hex: "#FFFFFF"),
+            font: Font.system(size: 22, weight: .heavy, design: .monospaced)
+        ))
+    )
+    
+    public static let black: Theme = Theme(
+        background: Color(hex: "#000000"),
+        title: Foreground(
+            color: Color(hex: "#FFFFFF"),
+            font: Font.system(size: 80, weight: .bold, design: .default)
+        ),
+        subtitle: Foreground(
+            color: Color(hex: "#FFFFFF"),
+            font: Font.system(size: 40, weight: .light, design: .default).italic()
+        ),
+        body: Foreground(
+            color: Color(hex: "#FFFFFF"),
+            font: Font.system(size: 40, weight: .regular, design: .default)
+        ),
+        code: Foreground(
+            color: Color(hex: "#FFFFFF"),
+            font: Font.system(size: 22, weight: .regular, design: .monospaced)
+        ),
+        codeHighlighted: (Color(hex: "#CCCCCC"), Foreground(
+            color: Color(hex: "#000000"),
+            font: Font.system(size: 22, weight: .heavy, design: .monospaced)
+        ))
+    )
+    
+    public static let white: Theme = Theme(
+        background: Color(hex: "#FFFFFF"),
+        title: Foreground(
+            color: Color(hex: "#000000"),
+            font: Font.system(size: 80, weight: .bold, design: .default)
+        ),
+        subtitle: Foreground(
+            color: Color(hex: "#000000"),
+            font: Font.system(size: 40, weight: .light, design: .default).italic()
+        ),
+        body: Foreground(
+            color: Color(hex: "#000000"),
+            font: Font.system(size: 40, weight: .regular, design: .default)
+        ),
+        code: Foreground(
+            color: Color(hex: "#000000"),
+            font: Font.system(size: 22, weight: .regular, design: .monospaced)
+        ),
+        codeHighlighted: (Color(hex: "#000000"), Foreground(
+            color: Color(hex: "#FFFFFF"),
+            font: Font.system(size: 22, weight: .heavy, design: .monospaced)
+        ))
     )
 }
 
-extension Color {
+public extension Color {
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
         var int: UInt64 = 0

@@ -19,16 +19,17 @@ public struct Code: ContentItem {
         return text.components(separatedBy: "\n")
     }
     
-    @ViewBuilder
-    public var view: AnyView {
+    // TODO: Use theme
+    public func buildView(theme: Theme) -> AnyView {
         AnyView(
-            CodeView(lines: self.lines)
+            CodeView(lines: self.lines, theme: theme)
         )
     }
 }
 
 struct CodeView: View {
     let lines: [String]
+    let theme: Theme
     let nonEmptyLineIndexes: [Int]
     
     @State var focusedLineIndex: Int?
@@ -40,8 +41,9 @@ struct CodeView: View {
         return self.nonEmptyLineIndexes[index]
     }
     
-    init(lines: [String]) {
+    init(lines: [String], theme: Theme) {
         self.lines = lines
+        self.theme = theme
         
         self.nonEmptyLineIndexes = self.lines.enumerated().compactMap { (index, line) -> Int? in
             if line.filter({ !$0.isWhitespace }).isEmpty {
@@ -58,14 +60,14 @@ struct CodeView: View {
                 ForEach(Array(self.lines.enumerated()), id:\.offset) { index, line in
                     Text(line)
                         .font(
-                            Font.system(
-                                size: 18,
-                                weight: isFocused(index) ? .heavy : .regular,
-                                design: .monospaced)
+                            isFocused(index) ? self.theme.codeHighlighted.1.font : self.theme.code.font
+                        )
+                        .foregroundColor(
+                            isFocused(index) ? self.theme.codeHighlighted.1.color : self.theme.code.color
                         )
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.vertical, 1)
-                        .background(isFocused(index) ? Color.black.opacity(0.5) : nil)
+                        .background(isFocused(index) ? self.theme.codeHighlighted.0 : nil)
                 }
             }
         }

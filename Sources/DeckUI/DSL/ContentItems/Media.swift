@@ -47,8 +47,8 @@ public struct Media: ContentItem {
         self.kind = kind
     }
     
-    @ViewBuilder
-    public var view: AnyView {
+    // TODO: Use theme
+    public func buildView(theme: Theme) -> AnyView {
         AnyView(
             self.kind.view
         )

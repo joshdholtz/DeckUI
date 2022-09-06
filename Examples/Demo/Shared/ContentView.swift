@@ -16,7 +16,7 @@ struct ContentView: View {
 
 extension ContentView {
     var deck: Deck {
-        Deck(title: "DeckUI Demo") {
+        Deck(title: "DeckUI Demo", theme: .venonat) {
             Slide(alignment: .center) {
                 Title("Welcome to DeckUI")
             }
@@ -57,7 +57,7 @@ extension ContentView {
                 
                 Columns {
                     Column {
-                        Words("Left Side", style: .custom(Font.system(size: 40, weight: .bold)))
+                        Words("Left Side", font: Font.system(size: 40, weight: .bold))
                         Bullets(style: .bullet) {
                             Words("Left")
                             Words("Twix")
@@ -67,7 +67,7 @@ extension ContentView {
                     }
                     
                     Column {
-                        Words("Right Side", style: .custom(Font.system(size: 40, weight: .bold)))
+                        Words("Right Side", font: Font.system(size: 40, weight: .bold))
                         
                         Code("""
                         Slide {
@@ -102,13 +102,21 @@ extension ContentView {
                         Code("""
                         struct CounterView: View {
                             @State var count = 0
-
+                            
                             var body: some View {
                                 Button {
                                     self.count += 1
                                 } label: {
                                     Text("Press me - \\(self.count)")
-                                }
+                                        .font(.system(size: 60))
+                                        .padding(.horizontal, 40)
+                                        .padding(.vertical, 20)
+                                        .foregroundColor(.white)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 25)
+                                            .stroke(Color.white, lineWidth: 2)
+                                        )
+                                }.buttonStyle(.plain)
                             }
                         }
                         """)
@@ -120,6 +128,8 @@ extension ContentView {
                 Title("Make Deck like...")
                 Columns {
                     Column {
+                        Words("Scroll to see all the code...")
+                        
                         Code("""
                         Deck(title: "SomeConf 2023") {
                             Slide(alignment: .center) {
@@ -197,6 +207,32 @@ extension ContentView {
     }
 }
 
+extension Theme {
+    public static let venonat: Theme = Theme(
+        background: Color(hex: "#624a7b"),
+        title: Foreground(
+            color: Color(hex: "#ff5a5a"),
+            font: Font.system(size: 80, weight: .bold, design: .default)
+        ),
+        subtitle: Foreground(
+            color: Color(hex: "#a48bbd"),
+            font: Font.system(size: 50, weight: .light, design: .default).italic()
+        ),
+        body: Foreground(
+            color: Color(hex: "#FFFFFF"),
+            font: Font.system(size: 50, weight: .regular, design: .default)
+        ),
+        code: Foreground(
+            color: Color(hex: "#FFFFFF"),
+            font: Font.system(size: 26, weight: .regular, design: .monospaced)
+        ),
+        codeHighlighted: (Color(hex: "#312952"), Foreground(
+            color: Color(hex: "#FFFFFF"),
+            font: Font.system(size: 26, weight: .heavy, design: .monospaced)
+        ))
+    )
+}
+
 struct CounterView: View {
     @State var count = 0
     
@@ -205,6 +241,14 @@ struct CounterView: View {
             self.count += 1
         } label: {
             Text("Press me - \(self.count)")
-        }
+                .font(.system(size: 60))
+                .padding(.horizontal, 40)
+                .padding(.vertical, 20)
+                .foregroundColor(.white)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 25)
+                    .stroke(Color.white, lineWidth: 2)
+                )
+        }.buttonStyle(.plain)
     }
 }

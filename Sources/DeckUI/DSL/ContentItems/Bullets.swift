@@ -31,15 +31,15 @@ public struct Bullets: ContentItem {
         self.words = words
     }
     
-    @ViewBuilder
-    public var view: AnyView {
+    // TODO: Use theme
+    public func buildView(theme: Theme) -> AnyView {
         AnyView(
             // TODO: Not sure if hardocing leading here is great
             VStack(alignment: .leading, spacing: 10) {
                 ForEach(self.words(), id:\.id) { word in
                     HStack(alignment: .center, spacing: 10) {
-                        Words(self.style.display, style: word.style).view
-                        word.view
+                        Words(self.style.display, color: word.color, font: word.font).buildView(theme: theme)
+                        word.buildView(theme: theme)
                     }
                 }
             }

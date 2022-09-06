@@ -30,7 +30,7 @@ public struct Slide: Identifiable {
         let contentViews = contentItems()
         return AnyView(
             ForEach(contentViews, id: \.id) {
-                $0.view
+                $0.buildView(theme: theme)
             }
         )
     }

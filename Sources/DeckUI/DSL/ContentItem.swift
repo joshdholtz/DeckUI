@@ -9,7 +9,7 @@ import SwiftUI
 
 public protocol ContentItem {
     var id: UUID { get }
-    var view: AnyView { get }
+    func buildView(theme: Theme) -> AnyView
 }
 
 @resultBuilder

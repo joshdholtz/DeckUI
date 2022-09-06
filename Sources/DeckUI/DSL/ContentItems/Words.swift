@@ -8,37 +8,23 @@
 import SwiftUI
 
 public struct Words: ContentItem {
-    public enum Style {
-        case title, subtitle, body, custom(Font)
-        
-        var font: Font {
-            switch self {
-            case .title:
-                return Font.system(size: 60, weight: .bold, design: .default)
-            case .subtitle:
-                return Font.system(size: 40, weight: .light, design: .default)
-            case .body:
-                return Font.system(size: 30, weight: .regular, design: .default)
-            case .custom(let font):
-                return font
-            }
-        }
-    }
-    
     public let id = UUID()
     let text: String
-    let style: Style
+    let color: Color?
+    let font: Font?
     
-    public init(_ text: String, style: Style = .body) {
+    public init(_ text: String, color: Color? = nil, font: Font? = nil) {
         self.text = text
-        self.style = style
+        self.color = color
+        self.font = font
     }
     
-    @ViewBuilder
-    public var view: AnyView {
+    // TODO: Use theme
+    public func buildView(theme: Theme) -> AnyView {
         AnyView(
             Text(self.text)
-                .font(self.style.font)
+                .font(self.font ?? theme.body.font)
+                .foregroundColor(self.color ?? theme.body.color)
         )
     }
 }

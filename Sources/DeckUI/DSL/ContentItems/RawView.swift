@@ -16,8 +16,8 @@ public struct RawView<Content: View>: ContentItem {
         self.content = content()
     }
     
-    @ViewBuilder
-    public var view: AnyView {
+    // TODO: Use theme
+    public func buildView(theme: Theme) -> AnyView {
         AnyView(
             self.content
         )
