@@ -11,32 +11,10 @@ public struct Presenter: View {
     
     @ObservedObject var viewModel = ContentViewModel()
     
-    public enum SlideDirection {
-        case horizontal, vertical
-        
-        var next: AnyTransition {
-            switch self {
-            case .horizontal:
-                return .slideFromTrailing
-            case .vertical:
-                return .slideFromBottom
-            }
-        }
-        
-        var previous: AnyTransition {
-            switch self {
-            case .horizontal:
-                return .slideFromLeading
-            case .vertical:
-                return .slideFromTop
-            }
-        }
-    }
-    
     public typealias DefaultResolution = (width: Double, height: Double)
     
     let deck: Deck
-    let slideDirection: SlideDirection
+    let slideDirection: SlideDirection?
     let loop: Bool
     let defaultResolution: DefaultResolution
     let showCamera: Bool
@@ -46,7 +24,7 @@ public struct Presenter: View {
     @State var isFullScreen = false
     @State var activeTransition: AnyTransition = .slideFromTrailing
     
-    public init(deck: Deck, slideDirection: SlideDirection = .horizontal, loop: Bool = false, defaultResolution: DefaultResolution = (width: 1920, height: 1080), showCamera: Bool = false, cameraConfig: CameraConfig = CameraConfig()) {
+    public init(deck: Deck, slideDirection: SlideDirection? = .horizontal, loop: Bool = false, defaultResolution: DefaultResolution = (width: 1920, height: 1080), showCamera: Bool = false, cameraConfig: CameraConfig = CameraConfig()) {
         self.deck = deck
         self.slideDirection = slideDirection
         self.loop = loop
@@ -194,6 +172,34 @@ public struct Presenter: View {
             }
         } else {
             self.index -= 1
+        }
+    }
+}
+
+public enum SlideDirection {
+    case horizontal, vertical
+}
+
+extension Optional where Wrapped == SlideDirection {
+    var next: AnyTransition {
+        switch self {
+        case .horizontal:
+            return .slideFromTrailing
+        case .vertical:
+            return .slideFromBottom
+        case .none:
+            return .identity
+        }
+    }
+    
+    var previous: AnyTransition {
+        switch self {
+        case .horizontal:
+            return .slideFromLeading
+        case .vertical:
+            return .slideFromTop
+        case .none:
+            return .identity
         }
     }
 }
