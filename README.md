@@ -37,6 +37,8 @@ Well, I made this because:
 - [ ] Documentation
 - [ ] More examples
 
+## Simple Demo
+
 ```swift
 import SwiftUI
 import DeckUI
@@ -55,13 +57,28 @@ extension ContentView {
             }
 
             Slide {
-                Title("Slide 1")
-                Words("Some useful content")
+                Title("Quick Demo")
+                Columns {
+                    Column {
+                        Bullets {
+                            Words("Bullets")
+                            Words("Words")
+                            Words("Images")
+                            Words("Columns")
+                        }
+                    }
+                    
+                    Column {
+                        Media(.remoteImage(URL(string: "https://www.fillmurray.com/g/200/300")!))
+                    }
+                }
             }
         }
     }
 }
 ```
+
+https://user-images.githubusercontent.com/401294/189043329-fe75161c-17c1-4471-8632-07fb79d26d1a.mov
 
 ## 💻 Installing
 
