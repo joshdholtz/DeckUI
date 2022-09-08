@@ -4,7 +4,4 @@
    <FileRef
       location = "group:Examples/Demo/Demo.xcodeproj">
    </FileRef>
-   <FileRef
-      location = "group:DeckUI.xcodeproj">
-   </FileRef>
 </Workspace>

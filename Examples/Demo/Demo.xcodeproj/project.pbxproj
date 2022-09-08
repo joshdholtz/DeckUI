@@ -17,12 +17,10 @@
 		2C11908528BE84350038D4B9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C11905B28BE84350038D4B9 /* ContentView.swift */; };
 		2C11908628BE84350038D4B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C11905C28BE84350038D4B9 /* Assets.xcassets */; };
 		2C11908728BE84350038D4B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C11905C28BE84350038D4B9 /* Assets.xcassets */; };
-		2C1190AA28BE86AA0038D4B9 /* DeckUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C1190A628BE84D00038D4B9 /* DeckUI.framework */; };
-		2C1190AB28BE86AA0038D4B9 /* DeckUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2C1190A628BE84D00038D4B9 /* DeckUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		2C1190AD28BE86B40038D4B9 /* DeckUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C1190A828BE84D30038D4B9 /* DeckUI.framework */; };
-		2C1190AE28BE86B40038D4B9 /* DeckUI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2C1190A828BE84D30038D4B9 /* DeckUI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2C1190C128C1A7030038D4B9 /* bill-murray.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 2C1190C028C1A7030038D4B9 /* bill-murray.jpeg */; };
 		2C1190C228C1A82D0038D4B9 /* bill-murray.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 2C1190C028C1A7030038D4B9 /* bill-murray.jpeg */; };
+		377A9A5828CA76D600AAA2E2 /* DeckUI in Frameworks */ = {isa = PBXBuildFile; productRef = 377A9A5728CA76D600AAA2E2 /* DeckUI */; };
+		377A9A5A28CA76DE00AAA2E2 /* DeckUI in Frameworks */ = {isa = PBXBuildFile; productRef = 377A9A5928CA76DE00AAA2E2 /* DeckUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,31 +40,6 @@
 		};
 /* End PBXContainerItemProxy section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		2C1190AC28BE86AA0038D4B9 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				2C1190AB28BE86AA0038D4B9 /* DeckUI.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2C1190AF28BE86B40038D4B9 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				2C1190AE28BE86B40038D4B9 /* DeckUI.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
 		2C11905A28BE84350038D4B9 /* DemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoApp.swift; sourceTree = "<group>"; };
 		2C11905B28BE84350038D4B9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -83,6 +56,7 @@
 		2C1190A628BE84D00038D4B9 /* DeckUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DeckUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C1190A828BE84D30038D4B9 /* DeckUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DeckUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C1190C028C1A7030038D4B9 /* bill-murray.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "bill-murray.jpeg"; sourceTree = "<group>"; };
+		377A9A5628CA76AC00AAA2E2 /* DeckUI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = DeckUI; path = ../..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,7 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2C1190AD28BE86B40038D4B9 /* DeckUI.framework in Frameworks */,
+				377A9A5A28CA76DE00AAA2E2 /* DeckUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,7 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2C1190AA28BE86AA0038D4B9 /* DeckUI.framework in Frameworks */,
+				377A9A5828CA76D600AAA2E2 /* DeckUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,6 +96,7 @@
 		2C11905428BE84340038D4B9 = {
 			isa = PBXGroup;
 			children = (
+				377A9A5528CA76AC00AAA2E2 /* Packages */,
 				2C11905928BE84350038D4B9 /* Shared */,
 				2C1190BF28C1A7030038D4B9 /* Media */,
 				2C11906828BE84350038D4B9 /* macOS */,
@@ -196,6 +171,14 @@
 			path = Media;
 			sourceTree = "<group>";
 		};
+		377A9A5528CA76AC00AAA2E2 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				377A9A5628CA76AC00AAA2E2 /* DeckUI */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -206,13 +189,15 @@
 				2C11905D28BE84350038D4B9 /* Sources */,
 				2C11905E28BE84350038D4B9 /* Frameworks */,
 				2C11905F28BE84350038D4B9 /* Resources */,
-				2C1190AF28BE86B40038D4B9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = "Demo (iOS)";
+			packageProductDependencies = (
+				377A9A5928CA76DE00AAA2E2 /* DeckUI */,
+			);
 			productName = "Demo (iOS)";
 			productReference = 2C11906128BE84350038D4B9 /* Demo.app */;
 			productType = "com.apple.product-type.application";
@@ -224,13 +209,15 @@
 				2C11906328BE84350038D4B9 /* Sources */,
 				2C11906428BE84350038D4B9 /* Frameworks */,
 				2C11906528BE84350038D4B9 /* Resources */,
-				2C1190AC28BE86AA0038D4B9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = "Demo (macOS)";
+			packageProductDependencies = (
+				377A9A5728CA76D600AAA2E2 /* DeckUI */,
+			);
 			productName = "Demo (macOS)";
 			productReference = 2C11906728BE84350038D4B9 /* Demo.app */;
 			productType = "com.apple.product-type.application";
@@ -762,6 +749,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		377A9A5728CA76D600AAA2E2 /* DeckUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DeckUI;
+		};
+		377A9A5928CA76DE00AAA2E2 /* DeckUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DeckUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2C11905528BE84340038D4B9 /* Project object */;
 }
