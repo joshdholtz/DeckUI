@@ -9,6 +9,8 @@ Well, I made this because:
 - Wanted to use this as a demo for future conference talk on Swift DSLs
 - Need something more customizable than markdown for writing slide decks and more codey than Keynote
 
+👉 Watch [Introducing DeckUI - Write slide decks in Swift](https://www.youtube.com/watch?v=FraeH6OeJPY) on my YouTube channel
+
 ## ✨ Features
 
 - [x] Create slide decks in pure Swift code
