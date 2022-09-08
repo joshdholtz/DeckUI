@@ -71,7 +71,7 @@ extension Theme {
         ),
         subtitle: Foreground(
             color: Color(hex: "#FFFFFF"),
-            font: Font.system(size: 40, weight: .light, design: .default).italic()
+            font: Font.system(size: 50, weight: .light, design: .default).italic()
         ),
         body: Foreground(
             color: Color(hex: "#FFFFFF"),

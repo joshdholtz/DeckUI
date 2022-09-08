@@ -10,9 +10,11 @@ import SwiftUI
 public struct Code: ContentItem {
     public let id = UUID()
     let text: String
+    let enableHighlight: Bool
     
-    public init(_ text: String) {
+    public init(_ text: String, enableHighlight: Bool = true) {
         self.text = text
+        self.enableHighlight = enableHighlight
     }
     
     var lines: [String] {
@@ -22,13 +24,14 @@ public struct Code: ContentItem {
     // TODO: Use theme
     public func buildView(theme: Theme) -> AnyView {
         AnyView(
-            CodeView(lines: self.lines, theme: theme)
+            CodeView(lines: self.lines, enableHighlight: self.enableHighlight, theme: theme)
         )
     }
 }
 
 struct CodeView: View {
     let lines: [String]
+    let enableHighlight: Bool
     let theme: Theme
     let nonEmptyLineIndexes: [Int]
     
@@ -41,8 +44,9 @@ struct CodeView: View {
         return self.nonEmptyLineIndexes[index]
     }
     
-    init(lines: [String], theme: Theme) {
+    init(lines: [String], enableHighlight: Bool, theme: Theme) {
         self.lines = lines
+        self.enableHighlight = enableHighlight
         self.theme = theme
         
         self.nonEmptyLineIndexes = self.lines.enumerated().compactMap { (index, line) -> Int? in
@@ -72,9 +76,13 @@ struct CodeView: View {
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: .keyUp), perform: { _ in
-            self.previousLine()
+            if self.enableHighlight {
+                self.previousLine()
+            }
         }).onReceive(NotificationCenter.default.publisher(for: .keyDown), perform: { _ in
-            self.nextLine()
+            if self.enableHighlight {
+                self.nextLine()
+            }
         })
     }
     

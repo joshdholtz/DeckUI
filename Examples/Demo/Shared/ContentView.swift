@@ -10,31 +10,51 @@ import DeckUI
 
 struct ContentView: View {
     var body: some View {
-        Presenter(deck: self.deck)
+        Presenter(deck: self.deck, showCamera: true)
     }
 }
 
 extension ContentView {
     var deck: Deck {
-        Deck(title: "DeckUI Demo", theme: .venonat) {
+        Deck(title: "DeckUI Demo") {
             Slide(alignment: .center) {
-                Title("Welcome to DeckUI")
+                Title("Introducing...")
+            }
+            
+            Slide(alignment: .center) {
+                RawView {
+                    Text("DeckUI")
+                        .font(.system(size: 200, weight: .bold, design: .monospaced))
+                        .foregroundColor(.white)
+                        .padding(60)
+                        .border(.white.opacity(0.5), width: 20)
+                }
             }
             
             Slide {
                 Title("Introduction", subtitle: "What is it?")
-                Columns {
-                    Column {
-                        Bullets(style: .bullet) {
-                            Words("A Swift DSL used to make slides")
-                            Words("This is made for a future talk")
-                            Words("Probably never production ready")
-                        }
-                    }
-                    Column {
-                        Words("👈 So cool")
-                    }
+                Bullets(style: .bullet) {
+                    Words("A custom Swift DSL to make slide decks")
+                    Words("Distributed as a Swift Package")
+                    Words("Develop your slide deck in Xcode with Swift")
                 }
+            }
+            
+            Slide(alignment: .center) {
+                Title("But why?")
+            }
+            
+            Slide {
+                Title("But why?", subtitle: "Because I can")
+                Bullets(style: .bullet) {
+                    Words("Bored on a plane ride")
+                    Words("Future talk on writing Swift DSLs")
+                    Words("Markdown 👉 Swift 👈 Keynote")
+                }
+            }
+            
+            Slide(alignment: .center) {
+                Title("What's all possible?")
             }
 
             Slide(alignment: .center) {
@@ -53,40 +73,79 @@ extension ContentView {
             }
             
             Slide {
-                Title("Multiple Columns")
+                Title("Multiple Columns", subtitle: "1, 2, or more")
                 
                 Columns {
                     Column {
                         Bullets(style: .bullet) {
-                            Words("Left")
-                            Words("Twix")
-                            Words("Is")
-                            Words("Better")
+                            Words("Bill")
+                            Words("Murray")
+                            Words("Image")
+                            Words("👉")
                         }
                     }
                     
                     Column {
+                        Media(.bundleImage("bill-murray"))
+                    }
+                }
+            }
+            
+            Slide {
+                Title("3 Bill Muarries", subtitle: "Don't know the plural of  Murray")
+                
+                Columns {
+                    Column {
+                        Media(.bundleImage("bill-murray"))
+                    }
+                    
+                    Column {
+                        Media(.bundleImage("bill-murray"))
+                    }
+                    
+                    Column {
+                        Media(.bundleImage("bill-murray"))
+                    }
+                }
+            }
+            
+            Slide {
+                Title("Code Blocks", subtitle: "")
+                Columns {
+                    Column {
                         Code("""
-                        Slide {
-                            Title("Introduction")
-                            Columns {
-                                Column {
-                                    Words("- Super")
-                                    Words("- Duper")
-                                    Words("- Cool")
-                                }
-                                Column {
-                                    Words("👈 So cool")
-                                }
+                        struct CounterView: View {
+                            @State var count = 0
+                            
+                            var body: some View {
+                                Button {
+                                    self.count += 1
+                                } label: {
+                                    Text("Press me - \\(self.count)")
+                                        .font(.system(size: 60))
+                                        .padding(.horizontal, 40)
+                                        .padding(.vertical, 20)
+                                        .foregroundColor(.white)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 25)
+                                            .stroke(Color.white, lineWidth: 2)
+                                        )
+                                }.buttonStyle(.plain)
                             }
                         }
                         """)
+                    }
+                    Column {
+                        Bullets {
+                            Words("Press up and down arrows")
+                            Words("You can highlight lines")
+                        }
                     }
                 }
             }
 
             Slide {
-                Title("Drop in any SwiftUI view")
+                Title("Drop in any SwiftUI view", subtitle: "Do anything you want")
                 
                 Columns {
                     Column {
@@ -120,85 +179,274 @@ extension ContentView {
                     }
                 }
             }
+            
+            Slide(alignment: .center) {
+                Title("Quick tutorial")
+            }
 
             Slide {
-                Title("Make Deck like...")
+                Title("Make Deck like...", subtitle: "Super simple")
                 Columns {
                     Column {
-                        Words("Scroll to see all the code...")
-                        
                         Code("""
-                        Deck(title: "SomeConf 2023") {
-                            Slide(alignment: .center) {
-                                Title("Welcome to DeckUI")
+                        import SwiftUI
+                        import DeckUI
+                        
+                        struct ContentView: View {
+                            var body: some View {
+                                Presenter(deck: self.deck)
                             }
+                        }
 
-                            Slide {
-                                Title("Introduction", subtitle: "What is it?")
-                                Columns {
-                                    Column {
-                                        Words("- A Swift DSL used to make slides")
-                                        Words("- This is made for a future talk")
-                                        Words("- Probably never production ready")
+                        extension ContentView {
+                            var deck: Deck {
+                                Deck(title: "SomeConf 2023") {
+                                    Slide(alignment: .center) {
+                                        Title("Welcome to DeckUI")
                                     }
-                                    Column {
-                                        Words("👈 So cool")
+                        
+                                    Slide {
+                                        Title("Slide 1")
+                                        Words("Some useful content")
                                     }
-                                }
-                            }
-
-                            Slide(alignment: .center) {
-                                Title("Center alignment")
-                                Words("Slides can be center aligned")
-                            }
-
-                            Slide(alignment: .top) {
-                                Title("Top alignment")
-                                Words("Slides also be top aligned")
-                            }
-
-                            Slide {
-                                Title("Drop in any SwiftUI view")
-                                RawView {
-                                    CounterView()
                                 }
                             }
                         }
                         """)
                     }
+                    
+                    Column {
+                        Bullets(style: .bullet) {
+                            Words("Create a `Deck` with multiple `Slide` ")
+                            Words("Create `Presenter` and give a deck")
+                            Words("`Presenter` is a SwiftUI to present a `Deck`")
+                        }
+                    }
+                }
+            }
+            
+            Slide(theme: .venonat) {
+                Title("Change theme", subtitle: "On Deck or Slide")
+                Columns {
+                    Column {
+                        Code("""
+                        extension Theme {
+                            public static let venonat: Theme = Theme(
+                                background: Color(hex: "#624a7b"),
+                                title: Foreground(
+                                    color: Color(hex: "#ff5a5a"),
+                                    font: Font.system(size: 80,
+                                                      weight: .bold,
+                                                      design: .default)
+                                ),
+                                subtitle: Foreground(
+                                    color: Color(hex: "#a48bbd"),
+                                    font: Font.system(size: 50,
+                                                      weight: .light,
+                                                      design: .default).italic()
+                                ),
+                                body: Foreground(
+                                    color: Color(hex: "#FFFFFF"),
+                                    font: Font.system(size: 50,
+                                                      weight: .regular,
+                                                      design: .default)
+                                ),
+                                code: Foreground(
+                                    color: Color(hex: "#FFFFFF"),
+                                    font: Font.system(size: 26,
+                                                      weight: .regular,
+                                                      design: .monospaced)
+                                ),
+                                codeHighlighted: (Color(hex: "#312952"), Foreground(
+                                    color: Color(hex: "#FFFFFF"),
+                                    font: Font.system(size: 26,
+                                                      weight: .heavy,
+                                                      design: .monospaced)
+                                ))
+                            )
+                        }
+                        """)
+                    }
+                    
+                    Column {
+                        Code("""
+                        // Set theme on presenter
+                        var body: some View {
+                            Presenter(deck: self.deck, theme: .venonat)
+                        }
+
+                        // Or on individual slide
+                        Slide(theme: .venonat) {
+                            Title("Some slide")
+                        }
+                        """, enableHighlight: false)
+                    }
                 }
             }
             
             Slide {
-                Title("Present like...")
-                
-                Code("""
-                import SwiftUI
-                import DeckUI
-                
-                struct ContentView: View {
-                    var body: some View {
-                        Presenter(deck: self.deck)
-                
-                        // or Presenter(deck: self.deck, slideDirection: .vertical, loop: true)
+                Title("Bullets", subtitle: "")
+                Columns {
+                    Column {
+                        Code("""
+                        Slide {
+                            Bullets {
+                                Words("")
+                                Words("")
+                                Words("")
+                            }
+                            
+                            Bullets(style: .dash) {
+                                Words("")
+                                Words("")
+                                Words("")
+                            }
+                        }
+                        """)
                     }
-                }
-
-                extension ContentView {
-                    var deck: Deck {
-                        Deck(title: "SomeConf 2023") {
-                            Slide(alignment: .center) {
-                                Title("Welcome to DeckUI")
-                            }
-                
-                            Slide {
-                                Title("Slide 1")
-                                Words("Some useful content")
-                            }
+                    
+                    Column {
+                        Bullets {
+                            Words("Bullets take `Words`")
+                            Words("Default to circle/bullet")
+                            Words("Can change style")
                         }
                     }
                 }
-                """)
+            }
+
+            Slide {
+                Title("Media", subtitle: "")
+                Columns {
+                    Column {
+                        Code("""
+                        Slide {
+                            Media(.assetImage(""))
+                            Media(.bundleImage(""))
+                            Media(.remoteImage(URL(string: ""))!)
+                        }
+                        """)
+                    }
+                    
+                    Column {
+                        Bullets {
+                            Words("Three media types")
+                            Words("Currently all images")
+                            Words("Video coming soon")
+                        }
+                    }
+                }
+            }
+
+            Slide {
+                Title("Columns", subtitle: "")
+                Columns {
+                    Column {
+                        Code("""
+                        Slide {
+                            Code(\"\"\"
+                            Columns {
+                                Column {
+                                    Bullets {
+                                        Words("Left")
+                                        Words("is")
+                                        Words("cool")
+                                    }
+                                }
+                                Column {
+                                    Bullets {
+                                        Words("Right")
+                                        Words("is")
+                                        Words("cooler")
+                                    }
+                                }
+                            }
+                            \"\"\")
+                        }
+                        """)
+                    }
+                    
+                    Column {
+                        Bullets {
+                            Words("Split slide into 1 to many columns")
+                            Words("No more explaination needed")
+                        }
+                    }
+                }
+            }
+
+            Slide {
+                Title("Code", subtitle: "")
+                Columns {
+                    Column {
+                        Code("""
+                        Slide {
+                            Code(\"\"\"
+                            Columns {
+                                Column {
+                                    Bullets {
+                                        Words("Left")
+                                        Words("is")
+                                        Words("cool")
+                                    }
+                                }
+                                Column {
+                                    Bullets {
+                                        Words("Right")
+                                        Words("is")
+                                        Words("cooler")
+                                    }
+                                }
+                            }
+                            \"\"\")
+                        }
+                        """)
+                    }
+                    
+                    Column {
+                        Bullets {
+                            Words("Easily drop in any code")
+                            Words("Up and down highlight lines")
+                            Words("Syntax highlight (eventually)")
+                        }
+                    }
+                }
+            }
+
+            Slide {
+                Title("RawView", subtitle: "Power is all yours")
+                Columns {
+                    Column {
+                        Code("""
+                            Slide(alignment: .center) {
+                                RawView {
+                                    Text("DeckUI")
+                                        .font(.system(size: 200, weight: .bold, design: .monospaced))
+                                        .foregroundColor(.white)
+                                        .padding(60)
+                                        .border(.white.opacity(0.5), width: 20)
+                                }
+                            }
+                        """)
+                    }
+                    
+                    Column {
+                        Bullets {
+                            Words("Put any SwiftUI view in `RawView`")
+                            Words("Native view or custom view")
+                            Words("Great for showing SwiftUI, WeatherKit, or any API or SDK examples")
+                        }
+                    }
+                }
+            }
+            
+            Slide(alignment: .center) {
+                RawView {
+                    Text("https://github.com/joshdholtz/deckui")
+                        .underline()
+                        .font(.system(size: 60, weight: .bold, design: .monospaced))
+                        .foregroundColor(.white)
+                }
             }
         }
     }
@@ -209,23 +457,33 @@ extension Theme {
         background: Color(hex: "#624a7b"),
         title: Foreground(
             color: Color(hex: "#ff5a5a"),
-            font: Font.system(size: 80, weight: .bold, design: .default)
+            font: Font.system(size: 80,
+                              weight: .bold,
+                              design: .default)
         ),
         subtitle: Foreground(
             color: Color(hex: "#a48bbd"),
-            font: Font.system(size: 50, weight: .light, design: .default).italic()
+            font: Font.system(size: 50,
+                              weight: .light,
+                              design: .default).italic()
         ),
         body: Foreground(
             color: Color(hex: "#FFFFFF"),
-            font: Font.system(size: 50, weight: .regular, design: .default)
+            font: Font.system(size: 50,
+                              weight: .regular,
+                              design: .default)
         ),
         code: Foreground(
             color: Color(hex: "#FFFFFF"),
-            font: Font.system(size: 26, weight: .regular, design: .monospaced)
+            font: Font.system(size: 26,
+                              weight: .regular,
+                              design: .monospaced)
         ),
         codeHighlighted: (Color(hex: "#312952"), Foreground(
             color: Color(hex: "#FFFFFF"),
-            font: Font.system(size: 26, weight: .heavy, design: .monospaced)
+            font: Font.system(size: 26,
+                              weight: .heavy,
+                              design: .monospaced)
         ))
     )
 }

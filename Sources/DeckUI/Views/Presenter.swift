@@ -8,6 +8,9 @@
 import SwiftUI
 
 public struct Presenter: View {
+    
+    @ObservedObject var viewModel = ContentViewModel()
+    
     public enum SlideDirection {
         case horizontal, vertical
         
@@ -36,16 +39,20 @@ public struct Presenter: View {
     let slideDirection: SlideDirection
     let loop: Bool
     let defaultResolution: DefaultResolution
+    let showCamera: Bool
+    let cameraConfig: CameraConfig
     
     @State var index = 0
     @State var isFullScreen = false
     @State var activeTransition: AnyTransition = .slideFromTrailing
     
-    public init(deck: Deck, slideDirection: SlideDirection = .horizontal, loop: Bool = false, defaultResolution: DefaultResolution = (width: 1920, height: 1080)) {
+    public init(deck: Deck, slideDirection: SlideDirection = .horizontal, loop: Bool = false, defaultResolution: DefaultResolution = (width: 1920, height: 1080), showCamera: Bool = false, cameraConfig: CameraConfig = CameraConfig()) {
         self.deck = deck
         self.slideDirection = slideDirection
         self.loop = loop
         self.defaultResolution = defaultResolution
+        self.showCamera = showCamera
+        self.cameraConfig = cameraConfig
     }
     
     var slide: Slide? {
@@ -80,7 +87,22 @@ public struct Presenter: View {
                     .clipped()
                     .frame(width: self.defaultResolution.0, height: self.defaultResolution.1, alignment: .center)
                     .scaleEffect(self.scaleAmount(proxy.size.width, proxy.size.height), anchor: .center)
+
+                if self.showCamera {
+                    ZStack(alignment: cameraConfig.alignment) {
+                        PlayerContainerView(captureSession: viewModel.captureSession)
+                            .frame(width: cameraConfig.size, height: cameraConfig.size)
+                            .clipShape(Circle())
+                            .padding(cameraConfig.padding)
+                        
+                        Color.clear // Make full width and height
+                    }.frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .scaleEffect(self.scaleAmount(proxy.size.width, proxy.size.height), anchor: .center)
+                }
             }.frame(minWidth: 100, maxWidth: .infinity, minHeight: 100, maxHeight: .infinity)
+                .onAppear {
+                    self.viewModel.checkAuthorization()
+                }
         }
     }
     
@@ -175,6 +197,19 @@ public struct Presenter: View {
         }
     }
 }
+
+public struct CameraConfig {
+    let size: CGFloat
+    let padding: CGFloat
+    let alignment: Alignment
+    
+    public init(size: CGFloat = 300, padding: CGFloat = 40, alignment: Alignment = .bottomTrailing) {
+        self.size = size
+        self.padding = padding
+        self.alignment = alignment
+    }
+}
+
 extension AnyTransition {
     static var slideFromBottom: AnyTransition {
         AnyTransition.asymmetric(
