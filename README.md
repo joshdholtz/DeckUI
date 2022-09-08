@@ -29,6 +29,7 @@ Well, I made this because:
 ### 🐌 Future Features
 
 - [ ] Support iOS and maybe tvOS
+- [ ] Fix bug with `Media` remote image loading and slide transitions
 - [ ] Animations within a slide
 - [ ] Support videos on `Media`
 - [ ] More customization on `Words`
@@ -112,6 +113,8 @@ Yes please! I'm happy to discuss issues and review/merge pull requests 🙂 I wi
 
 ### Slide
 
+`Slide` can be used without any parameters but can be given a custom `alignment`, `padding`, and `theme`.
+
 ```swift
 Slide {
     // Content
@@ -125,6 +128,8 @@ Slide(alignment: .center, padding: 80, theme: .white) {
 ```
 
 ### Title
+
+`Title` can be used by itself or with an optional `subtitle`. It was real similar to `Words` but larger.
 
 ```swift
 Slide(alignment: .center) {
@@ -141,6 +146,8 @@ Slide {
 
 ### Words
 
+`Words` are similar to what a textbox would be in Keynote, PowerPoint, or Google Slides. There will eventually be more style configurations for words.
+
 ```swift
 Slide(alignment: .center) {
     Title("Center alignment")
@@ -150,6 +157,8 @@ Slide(alignment: .center) {
 ```
 
 ### Bullets
+
+`Bullets` turns `Words` into a list. It takes an optional `style` parameter where you can choose between `.bullets` and `.dash`. `Bullets` cannot be nested yet but soon™️.
 
 ```swift
 Slide {
@@ -175,6 +184,8 @@ Slide {
 
 ### Media
 
+`Media` provides a few ways to display images from various source types. This will eventually support videos.
+
 ```swift
 Slide {
     Media(.assetImage("some-asset-name"))
@@ -184,6 +195,8 @@ Slide {
 ```
 
 ### Columns
+
+`Columns` allow you to use one to infinte `Column`s. Put other slide content in `Column`.
 
 ```swift
 Slide {
@@ -225,6 +238,11 @@ Slide {
 
 ### Code
 
+`Code` is a super specifi version `Words`. It will:
+- Display text as monospace
+- Scroll vertical if bigger than screen
+- Highlight lines of code when up and down arrows are pressed
+
 ```swift
 Slide {
     Code("""
@@ -250,6 +268,8 @@ Slide {
 ```
 
 ### RawView
+
+Drop any SwiftUI view inside of `RawView`. Could be built-in SwiftUI views like `Text` or `Button` but can also be any custom SwiftUI view.
 
 ```swift
 Slide {
@@ -280,6 +300,8 @@ struct CounterView: View {
 ```
 
 ### Themes
+
+A `Theme` can be set in `Presenter` or individually on `Slide`. There are three default themes (`.dark`, `.black`, `.white`) but feel free to use your own.
 
 ```swift
 struct ContentView: View {
