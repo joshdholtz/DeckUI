@@ -1,5 +1,9 @@
 # DeckUI
 
+![](https://img.shields.io/github/license/joshdholtz/DeckUI)
+[![](https://img.shields.io/badge/SPM-supported-DE5C43.svg?style=flat)](https://swift.org/package-manager/)
+[![](https://img.shields.io/badge/twitter-@joshdholtz-blue.svg?style=flat)]([https://twitter.com/joshdholtz](https://twitter.com/joshdholtz))
+
 DeckUI is a Swift DSL (domain specific language) for writing slide decks in Xcode. It allows for quick creation of  slides and content in a language and environment you are familiar with.
 
 But _why_? 
