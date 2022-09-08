@@ -25,13 +25,13 @@ Well, I made this because:
   - Fully interactable and great for demos
 - [x] Display code with `Code`
   - Use up and down arrows to highlight lines of code as your talking about them
+- [x] Support videos on `Media`
 
 ### 🐌 Future Features
 
 - [ ] Support iOS and maybe tvOS
 - [ ] Fix bug with `Media` remote image loading and slide transitions
 - [ ] Animations within a slide
-- [ ] Support videos on `Media`
 - [ ] More customization on `Words`
 - [ ] Nesting of `Bullets`
 - [ ] Syntax highlighting for `Code`
