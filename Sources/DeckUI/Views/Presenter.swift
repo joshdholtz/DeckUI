@@ -161,7 +161,7 @@ public struct Presenter: View {
         
         let nextSlide = slides[self.index]
         
-        self.activeTransition = (nextSlide.slideDirection ?? self.slideDirection).next
+        self.activeTransition = (nextSlide.direction ?? self.slideDirection).next
     }
     
     private func previousSlide() {
@@ -177,7 +177,7 @@ public struct Presenter: View {
             self.index -= 1
         }
 
-        self.activeTransition = (currSlide.slideDirection ?? self.slideDirection).previous
+        self.activeTransition = (currSlide.direction ?? self.slideDirection).previous
     }
 }
 
