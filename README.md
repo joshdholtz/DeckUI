@@ -1,5 +1,7 @@
 # ✨ DeckUI
 
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fjoshdholtz%2FDeckUI%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/joshdholtz/DeckUI)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fjoshdholtz%2FDeckUI%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/joshdholtz/DeckUI)
 ![](https://img.shields.io/github/license/joshdholtz/DeckUI)
 [![](https://img.shields.io/badge/SPM-supported-DE5C43.svg?style=flat)](https://swift.org/package-manager/)
 [![](https://img.shields.io/badge/twitter-@joshdholtz-blue.svg?style=flat)]([https://twitter.com/joshdholtz](https://twitter.com/joshdholtz))
