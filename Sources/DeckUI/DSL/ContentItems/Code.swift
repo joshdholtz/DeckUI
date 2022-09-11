@@ -5,32 +5,34 @@
 //  Created by Josh Holtz on 8/30/22.
 //
 
+import Splash
 import SwiftUI
 
 public struct Code: ContentItem {
     public let id = UUID()
     let text: String
     let enableHighlight: Bool
+    let language: ProgrammingLanguage
     
-    public init(_ text: String, enableHighlight: Bool = true) {
+    public init(_ text: String, enableHighlight: Bool = true, language: ProgrammingLanguage = .none) {
         self.text = text
         self.enableHighlight = enableHighlight
+        self.language = language
     }
     
-    var lines: [String] {
-        return text.components(separatedBy: "\n")
-    }
-    
-    // TODO: Use theme
     public func buildView(theme: Theme) -> AnyView {
-        AnyView(
-            CodeView(lines: self.lines, enableHighlight: self.enableHighlight, theme: theme)
+        let format = CodeComponentFormat()
+        let highlighter = SyntaxHighlighter(format: format, grammar: self.language.grammar)
+        let components = highlighter.highlight(self.text)
+
+        return AnyView(
+            CodeView(components: components, enableHighlight: self.enableHighlight, theme: theme)
         )
     }
 }
 
 struct CodeView: View {
-    let lines: [String]
+    let components: [[CodeComponent]]
     let enableHighlight: Bool
     let theme: Theme
     let nonEmptyLineIndexes: [Int]
@@ -44,12 +46,12 @@ struct CodeView: View {
         return self.nonEmptyLineIndexes[index]
     }
     
-    init(lines: [String], enableHighlight: Bool, theme: Theme) {
-        self.lines = lines
+    init(components: [[CodeComponent]], enableHighlight: Bool, theme: Theme) {
+        self.components = components
         self.enableHighlight = enableHighlight
         self.theme = theme
         
-        self.nonEmptyLineIndexes = self.lines.enumerated().compactMap { (index, line) -> Int? in
+        self.nonEmptyLineIndexes = self.components.enumerated().compactMap { (index, line) -> Int? in
             if line.filter({ !$0.isWhitespace }).isEmpty {
                 return nil
             } else {
@@ -61,17 +63,18 @@ struct CodeView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
-                ForEach(Array(self.lines.enumerated()), id:\.offset) { index, line in
-                    Text(line)
-                        .font(
-                            isFocused(index) ? self.theme.codeHighlighted.1.font : self.theme.code.font
-                        )
-                        .foregroundColor(
-                            isFocused(index) ? self.theme.codeHighlighted.1.color : self.theme.code.color
-                        )
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.vertical, 1)
-                        .background(isFocused(index) ? self.theme.codeHighlighted.0 : nil)
+                ForEach(Array(self.components.enumerated()), id:\.offset) { index, line in
+                    HStack {
+                        ForEach(line, id:\.self) { component in
+                            if isFocused(index) {
+                                theme.codeHighlighted.text(for: component)
+                            } else {
+                                theme.code.text(for: component)
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.vertical, 1)
                 }
             }
         }

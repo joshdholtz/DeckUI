@@ -13,10 +13,28 @@ public struct Theme {
     var subtitle: Foreground
     var body: Foreground
     
-    var code: Foreground
-    var codeHighlighted: (Color, Foreground)
+    var code: CodeTheme
+    var codeHighlighted: CodeTheme
     
     public init(background: Color, title: Foreground, subtitle: Foreground, body: Foreground, code: Foreground, codeHighlighted: (Color, Foreground)) {
+        self.background = background
+        self.title = title
+        self.subtitle = subtitle
+        self.body = body
+        self.code = CodeTheme(font: code.font, plainTextColor: code.color, backgroundColor: .clear, tokenColors: [:])
+        self.codeHighlighted = CodeTheme(font: codeHighlighted.1.font, plainTextColor: codeHighlighted.1.color, backgroundColor: codeHighlighted.0, tokenColors: [:])
+    }
+    
+    public init(background: Color, title: Foreground, subtitle: Foreground, body: Foreground, code: CodeTheme, codeHighlighted: (Color, Foreground)) {
+        self.background = background
+        self.title = title
+        self.subtitle = subtitle
+        self.body = body
+        self.code = code
+        self.codeHighlighted = CodeTheme(font: codeHighlighted.1.font, plainTextColor: codeHighlighted.1.color, backgroundColor: codeHighlighted.0, tokenColors: [:])
+    }
+    
+    public init(background: Color, title: Foreground, subtitle: Foreground, body: Foreground, code: CodeTheme, codeHighlighted: CodeTheme) {
         self.background = background
         self.title = title
         self.subtitle = subtitle
