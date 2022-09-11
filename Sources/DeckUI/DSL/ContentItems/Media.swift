@@ -7,10 +7,14 @@
 
 import SwiftUI
 import AppKit
+import AVFoundation
+import Foundation
+import AVKit
 
 public struct Media: ContentItem {
     public enum Kind {
         case remoteImage(URL), assetImage(String), bundleImage(String)
+        case bundleVideo(String)
         
         var view: some View {
             Group {
@@ -35,6 +39,12 @@ public struct Media: ContentItem {
                     Image(nsImage: NSImage(named: name)!)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
+                case .bundleVideo(let name):
+                    let url = Bundle.main.url(forResource: name, withExtension: nil)!
+                    let player = AVPlayer(url: url)
+                    VideoPlayer(player: player).task {
+                        await player.play()
+                    }
                 }
             }
         }

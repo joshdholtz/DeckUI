@@ -73,6 +73,11 @@ extension ContentView {
             }
             
             Slide {
+                Title("Videos")
+                Media(.bundleVideo("big-buck-bunny.mp4"))
+            }
+            
+            Slide {
                 Title("Multiple Columns", subtitle: "1, 2, or more")
                 
                 Columns {
