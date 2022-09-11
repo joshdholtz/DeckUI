@@ -15,10 +15,10 @@ public struct Slide: Identifiable {
     let padding: CGFloat
     let comment: String?
     let theme: Theme?
-    let direction: SlideDirection?
+    let direction: SlideTransition?
     @ContentItemArrayBuilder var contentItems: () -> [ContentItem]
     
-    public init(alignment: Alignment = .topLeading, padding: CGFloat = 40, comment: String? = nil, theme: Theme? = nil, direction: SlideDirection? = nil, @ContentItemArrayBuilder contentItems: @escaping () -> [ContentItem]) {
+    public init(alignment: Alignment = .topLeading, padding: CGFloat = 40, comment: String? = nil, theme: Theme? = nil, direction: SlideTransition? = nil, @ContentItemArrayBuilder contentItems: @escaping () -> [ContentItem]) {
         self.alignment = alignment
         self.horizontalAlignment = .leading
         self.padding = padding
