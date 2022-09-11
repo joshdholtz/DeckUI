@@ -150,8 +150,6 @@ public struct Presenter: View {
     }
     
     private func nextSlide() {
-        self.activeTransition = self.slideDirection.next
-        
         let slides = self.deck.slides()
         if self.index >= (slides.count - 1) {
             if self.loop {
@@ -160,12 +158,17 @@ public struct Presenter: View {
         } else {
             self.index += 1
         }
+        
+        let nextSlide = slides[self.index]
+        
+        self.activeTransition = (nextSlide.direction ?? self.slideDirection).next
     }
     
     private func previousSlide() {
-        self.activeTransition = self.slideDirection.previous
-        
         let slides = self.deck.slides()
+
+        let currSlide = slides[self.index]
+        
         if self.index <= 0 {
             if self.loop {
                 self.index = slides.count - 1
@@ -173,6 +176,8 @@ public struct Presenter: View {
         } else {
             self.index -= 1
         }
+
+        self.activeTransition = (currSlide.direction ?? self.slideDirection).previous
     }
 }
 
