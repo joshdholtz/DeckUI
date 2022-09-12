@@ -8,9 +8,6 @@
 import SwiftUI
 
 public struct Presenter: View {
-    
-    @ObservedObject var viewModel = ContentViewModel()
-    
     public typealias DefaultResolution = (width: Double, height: Double)
     
     let deck: Deck
@@ -68,7 +65,7 @@ public struct Presenter: View {
 
                 if self.showCamera {
                     ZStack(alignment: cameraConfig.alignment) {
-                        PlayerContainerView(captureSession: viewModel.captureSession)
+                        Camera()
                             .frame(width: cameraConfig.size, height: cameraConfig.size)
                             .clipShape(Circle())
                             .padding(cameraConfig.padding)
@@ -78,9 +75,6 @@ public struct Presenter: View {
                         .scaleEffect(self.scaleAmount(proxy.size.width, proxy.size.height), anchor: .center)
                 }
             }.frame(minWidth: 100, maxWidth: .infinity, minHeight: 100, maxHeight: .infinity)
-                .onAppear {
-                    self.viewModel.checkAuthorization()
-                }
         }
     }
     
