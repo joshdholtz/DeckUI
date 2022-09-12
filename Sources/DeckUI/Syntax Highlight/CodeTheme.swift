@@ -40,3 +40,22 @@ extension CodeTheme {
         return attrString
     }
 }
+
+extension CodeTheme {
+    public static let xcodeDark: CodeTheme = CodeTheme(
+        font: Font.system(size: 22, weight: .regular, design: .monospaced),
+        plainTextColor: Color(hex: "#FFFFFF"),
+        backgroundColor: .clear,
+        tokenColors: [
+            .keyword:       Color(hex: "#ff79b3"),
+            .string:        Color(hex: "#ff8170"),
+            .type:          Color(hex: "#dabaff"),
+            .call:          Color(hex: "#78c2b4"),
+            .number:        Color(hex: "#dac87c"),
+            .comment:       Color(hex: "#808b98"),
+            .property:      Color(hex: "#79c2b4"),
+            .dotAccess:     Color(hex: "#79c2b4"),
+            .preprocessing: Color(hex: "#ffa14f")
+        ]
+    )
+}

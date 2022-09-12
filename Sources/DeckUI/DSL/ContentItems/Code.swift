@@ -67,6 +67,7 @@ struct CodeView: View {
                     Text(attributedString(for: line, highlight: isFocused(index)))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.vertical, 1)
+                        .background(isFocused(index) ? self.theme.codeHighlighted.backgroundColor : nil)
                 }
             }
         }

@@ -13,8 +13,8 @@ public struct Theme {
     var subtitle: Foreground
     var body: Foreground
     
-    var code: CodeTheme
-    var codeHighlighted: CodeTheme
+    public var code: CodeTheme
+    public var codeHighlighted: CodeTheme
     
     public init(background: Color, title: Foreground, subtitle: Foreground, body: Foreground, code: Foreground, codeHighlighted: (Color, Foreground)) {
         self.background = background
