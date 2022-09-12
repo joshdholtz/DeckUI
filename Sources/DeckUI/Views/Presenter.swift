@@ -102,6 +102,7 @@ public struct Presenter: View {
             }.transition(self.activeTransition)
         }
         .navigationTitle(self.deck.title)
+        #if canImport(AppKit)
         .if(!self.isFullScreen) {
             $0.toolbar {
                 ToolbarItemGroup {
@@ -115,6 +116,20 @@ public struct Presenter: View {
         .onReceive(NotificationCenter.default.publisher(for: NSWindow.willExitFullScreenNotification)) { _ in
             self.isFullScreen = false
         }
+        #elseif canImport(UIKit)
+        .gesture(DragGesture(minimumDistance: 3.0, coordinateSpace: .local)
+            .onEnded { value in
+                let tolerance: ClosedRange<CGFloat> = -100...100
+                switch(value.translation.width, value.translation.height) {
+                case (tolerance, ...0):  lineUp()
+                case (tolerance, 0...):  lineDown()
+                case (...0, tolerance):  nextSlide()
+                case (0..., tolerance):  previousSlide()
+                default:  break
+                }
+            }
+        )
+        #endif
     }
     
     var toolbarButtons: some View {
@@ -136,17 +151,26 @@ public struct Presenter: View {
             }.keyboardShortcut(.rightArrow, modifiers: [])
             
             Button {
-                NotificationCenter.default.post(name: .keyDown, object: nil)
+                lineDown()
+
             } label: {
                 Label("Down", systemImage: "arrow.down")
             }.keyboardShortcut(.downArrow, modifiers: [])
             
             Button {
-                NotificationCenter.default.post(name: .keyUp, object: nil)
+                lineUp()
             } label: {
                 Label("Up", systemImage: "arrow.up")
             }.keyboardShortcut(.upArrow, modifiers: [])
         }
+    }
+
+    private func lineUp() {
+        NotificationCenter.default.post(name: .keyUp, object: nil)
+    }
+
+    private func lineDown() {
+        NotificationCenter.default.post(name: .keyDown, object: nil)
     }
     
     private func nextSlide() {

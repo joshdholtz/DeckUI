@@ -6,40 +6,48 @@
 //
 
 import Foundation
-import AppKit
 import AVFoundation
 import SwiftUI
 import Combine
 
 // Taken from: https://benoitpasquier.com/webcam-utility-app-macos-swiftui/
 
-class PlayerView: NSView {
-    
-    var previewLayer: AVCaptureVideoPreviewLayer?
+final class PlayerView: PlatformView {
 
     init(captureSession: AVCaptureSession) {
+        #if canImport(AppKit)
         previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        #endif
         super.init(frame: .zero)
 
-        setupLayer()
-    }
-
-    func setupLayer() {
+        #if canImport(UIKit)
+        let previewLayer = layer as? AVCaptureVideoPreviewLayer
+        previewLayer?.session = captureSession
+        #endif
 
         previewLayer?.frame = self.frame
         previewLayer?.contentsGravity = .resizeAspectFill
         previewLayer?.videoGravity = .resizeAspectFill
         previewLayer?.connection?.automaticallyAdjustsVideoMirroring = false
+
+        #if canImport(AppKit)
         layer = previewLayer
+        #endif
     }
 
+    @available(*, unavailable, message: "Use init(captureSession:) instead")
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    #if canImport(AppKit)
+    var previewLayer: AVCaptureVideoPreviewLayer?
+    #elseif canImport(UIKit)
+    override class var layerClass: AnyClass { AVCaptureVideoPreviewLayer.self }
+    #endif
 }
 
-struct PlayerContainerView: NSViewRepresentable {
-    typealias NSViewType = PlayerView
+struct PlayerContainerView: PlatformAgnosticViewRepresentable {
 
     let captureSession: AVCaptureSession
 
@@ -47,14 +55,14 @@ struct PlayerContainerView: NSViewRepresentable {
         self.captureSession = captureSession
     }
 
-    func makeNSView(context: Context) -> PlayerView {
-        return PlayerView(captureSession: captureSession)
+    func makePlatformView(context: Context) -> PlayerView {
+        PlayerView(captureSession: captureSession)
     }
 
-    func updateNSView(_ nsView: PlayerView, context: Context) { }
+    func updatePlatformView(_ platformView: PlayerView, context: Context) {}
 }
 
-class ContentViewModel: ObservableObject {
+final class ContentViewModel: ObservableObject {
 
     @Published var isGranted: Bool = false
     var captureSession: AVCaptureSession!

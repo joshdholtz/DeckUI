@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import AppKit
 import AVFoundation
 import Foundation
 import AVKit
@@ -36,7 +35,7 @@ public struct Media: ContentItem {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                 case .bundleImage(let name):
-                    Image(nsImage: NSImage(named: name)!)
+                    Image(platformImage: PlatformImage(named: name)!)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                 case .bundleVideo(let name):
