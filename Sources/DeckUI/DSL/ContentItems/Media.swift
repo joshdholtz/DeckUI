@@ -35,7 +35,13 @@ public struct Media: ContentItem {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                 case .bundleImage(let name):
-                    Image(platformImage: PlatformImage(named: name)!)
+                    #if canImport(AppKit)
+                    let platformImage = PlatformImage(named: name)
+                    #elseif canImport(UIKit)
+                    let path = Bundle.main.path(forResource: name, ofType: nil)!
+                    let platformImage = PlatformImage(contentsOfFile: path)
+                    #endif
+                    Image(platformImage: platformImage!)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                 case .bundleVideo(let name):
