@@ -64,17 +64,9 @@ struct CodeView: View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView {
                 ForEach(Array(self.components.enumerated()), id:\.offset) { index, line in
-                    HStack {
-                        ForEach(line, id:\.self) { component in
-                            if isFocused(index) {
-                                theme.codeHighlighted.text(for: component)
-                            } else {
-                                theme.code.text(for: component)
-                            }
-                        }
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.vertical, 1)
+                    Text(attributedString(for: line, highlight: isFocused(index)))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical, 1)
                 }
             }
         }
@@ -89,6 +81,15 @@ struct CodeView: View {
         })
     }
     
+    
+    private func attributedString(for line: [CodeComponent], highlight: Bool) -> AttributedString {
+        let codeTheme = highlight ? theme.codeHighlighted : theme.code
+        var attrStr = AttributedString()
+        for component in line {
+            attrStr += codeTheme.text(for: component)
+        }
+        return attrStr
+    }
     
     private func nextLine() {
         if let index = self.focusedLineIndex {

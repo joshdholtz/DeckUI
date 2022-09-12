@@ -16,9 +16,7 @@ public struct CodeTheme {
 }
 
 extension CodeTheme {
-    func text(for code: CodeComponent) -> some View {
-        let font = font
-        let backgroundColor = backgroundColor
+    func text(for code: CodeComponent) -> AttributedString {
         let foregroundColor: SwiftUI.Color
         let text: String
         
@@ -33,10 +31,12 @@ extension CodeTheme {
             foregroundColor = plainTextColor
             text = string
         }
-        
-        return Text(text)
-            .foregroundColor(foregroundColor)
-            .background(backgroundColor)
-            .font(font)
+
+        var attrString = AttributedString(stringLiteral: text)
+        attrString.font = font
+        attrString.backgroundColor = backgroundColor
+        attrString.foregroundColor = foregroundColor
+
+        return attrString
     }
 }
