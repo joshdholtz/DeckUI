@@ -15,16 +15,16 @@ public struct Slide: Identifiable {
     let padding: CGFloat
     let comment: String?
     let theme: Theme?
-    let direction: SlideTransition?
+    let transition: SlideTransition?
     @ContentItemArrayBuilder var contentItems: () -> [ContentItem]
     
-    public init(alignment: Alignment = .topLeading, padding: CGFloat = 40, comment: String? = nil, theme: Theme? = nil, direction: SlideTransition? = nil, @ContentItemArrayBuilder contentItems: @escaping () -> [ContentItem]) {
+    public init(alignment: Alignment = .topLeading, padding: CGFloat = 40, comment: String? = nil, theme: Theme? = nil, transition: SlideTransition? = nil, @ContentItemArrayBuilder contentItems: @escaping () -> [ContentItem]) {
         self.alignment = alignment
         self.horizontalAlignment = .leading
         self.padding = padding
         self.comment = comment
         self.theme = theme
-        self.direction = direction
+        self.transition = transition
         self.contentItems = contentItems
     }
     
