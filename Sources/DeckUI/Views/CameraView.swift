@@ -13,7 +13,35 @@ import Combine
 
 // Taken from: https://benoitpasquier.com/webcam-utility-app-macos-swiftui/
 
-class PlayerView: NSView {
+struct Camera: View {
+    @StateObject var viewModel = ContentViewModel()
+    
+    var body: some View {
+        ZStack {
+            CameraContainerView(captureSession: viewModel.captureSession)
+                .onAppear {
+                    self.viewModel.checkAuthorization()
+                }
+            
+            // Hack: needed to make view clickable for context menu
+            // There might be a better way to do this but meh
+            Rectangle()
+                .fill(.white.opacity(0.001))
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+            .contextMenu {
+                ForEach(self.viewModel.availableDevices, id:\.self) { device in
+                    Button {
+                        self.viewModel.startSessionForDevice(device)
+                    } label: {
+                        Label(device.localizedName, systemImage: "video.fill")
+                    }
+                }
+            }
+    }
+}
+
+class CameraView: NSView {
     
     var previewLayer: AVCaptureVideoPreviewLayer?
 
@@ -38,8 +66,8 @@ class PlayerView: NSView {
     }
 }
 
-struct PlayerContainerView: NSViewRepresentable {
-    typealias NSViewType = PlayerView
+struct CameraContainerView: NSViewRepresentable {
+    typealias NSViewType = CameraView
 
     let captureSession: AVCaptureSession
 
@@ -47,16 +75,18 @@ struct PlayerContainerView: NSViewRepresentable {
         self.captureSession = captureSession
     }
 
-    func makeNSView(context: Context) -> PlayerView {
-        return PlayerView(captureSession: captureSession)
+    func makeNSView(context: Context) -> CameraView {
+        return CameraView(captureSession: captureSession)
     }
 
-    func updateNSView(_ nsView: PlayerView, context: Context) { }
+    func updateNSView(_ nsView: CameraView, context: Context) { }
 }
 
 class ContentViewModel: ObservableObject {
 
     @Published var isGranted: Bool = false
+    @Published var device: AVCaptureDevice? = nil
+    @Published var availableDevices = [AVCaptureDevice]()
     var captureSession: AVCaptureSession!
     private var cancellables = Set<AnyCancellable>()
 
@@ -77,6 +107,15 @@ class ContentViewModel: ObservableObject {
             .store(in: &cancellables)
     }
 
+    func fetchDevices() {
+        let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [
+            .builtInMicrophone,
+            .builtInWideAngleCamera,
+            .externalUnknown
+        ], mediaType: .video, position: .unspecified)
+        self.availableDevices = discoverySession.devices
+    }
+    
     func checkAuthorization() {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
             case .authorized: // The user has previously granted access to the camera.
@@ -115,17 +154,26 @@ class ContentViewModel: ObservableObject {
 
     func prepareCamera() {
         captureSession.sessionPreset = .high
-
+        
         if let device = AVCaptureDevice.default(for: .video) {
             startSessionForDevice(device)
         }
+        
+        self.fetchDevices()
     }
 
     func startSessionForDevice(_ device: AVCaptureDevice) {
         do {
+            for input in captureSession.inputs {
+                captureSession.removeInput(input)
+            }
+
             let input = try AVCaptureDeviceInput(device: device)
+            captureSession.beginConfiguration()
             addInput(input)
+            captureSession.commitConfiguration()
             startSession()
+            self.device = device
         }
         catch {
             print("Something went wrong - ", error.localizedDescription)
