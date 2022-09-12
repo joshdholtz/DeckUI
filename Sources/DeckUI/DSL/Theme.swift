@@ -71,10 +71,7 @@ extension Theme {
             color: Color(hex: "#FFFFFF"),
             font: Font.system(size: 40, weight: .regular, design: .default)
         ),
-        code: Foreground(
-            color: Color(hex: "#FFFFFF"),
-            font: Font.system(size: 22, weight: .regular, design: .monospaced)
-        ),
+        code: .xcodeDark,
         codeHighlighted: (Color(hex: "#000000"), Foreground(
             color: Color(hex: "#FFFFFF"),
             font: Font.system(size: 22, weight: .heavy, design: .monospaced)
