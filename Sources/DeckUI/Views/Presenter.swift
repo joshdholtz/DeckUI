@@ -59,7 +59,7 @@ public struct Presenter: View {
     public var body: some View {
         GeometryReader { proxy in
             ZStack(alignment: .center) {
-                Color.black
+                (slide?.theme ?? deck.theme).background
                 
                 self.bodyContents
                     .clipped()
