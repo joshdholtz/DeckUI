@@ -8,13 +8,10 @@
 import SwiftUI
 
 public struct Presenter: View {
-    
-    @ObservedObject var viewModel = ContentViewModel()
-    
     public typealias DefaultResolution = (width: Double, height: Double)
     
     let deck: Deck
-    let slideDirection: SlideDirection?
+    let slideTransition: SlideTransition?
     let loop: Bool
     let defaultResolution: DefaultResolution
     let showCamera: Bool
@@ -24,9 +21,9 @@ public struct Presenter: View {
     @State var isFullScreen = false
     @State var activeTransition: AnyTransition = .slideFromTrailing
     
-    public init(deck: Deck, slideDirection: SlideDirection? = .horizontal, loop: Bool = false, defaultResolution: DefaultResolution = (width: 1920, height: 1080), showCamera: Bool = false, cameraConfig: CameraConfig = CameraConfig()) {
+    public init(deck: Deck, slideTransition: SlideTransition? = .horizontal, loop: Bool = false, defaultResolution: DefaultResolution = (width: 1920, height: 1080), showCamera: Bool = false, cameraConfig: CameraConfig = CameraConfig()) {
         self.deck = deck
-        self.slideDirection = slideDirection
+        self.slideTransition = slideTransition
         self.loop = loop
         self.defaultResolution = defaultResolution
         self.showCamera = showCamera
@@ -68,7 +65,7 @@ public struct Presenter: View {
 
                 if self.showCamera {
                     ZStack(alignment: cameraConfig.alignment) {
-                        PlayerContainerView(captureSession: viewModel.captureSession)
+                        Camera()
                             .frame(width: cameraConfig.size, height: cameraConfig.size)
                             .clipShape(Circle())
                             .padding(cameraConfig.padding)
@@ -78,9 +75,6 @@ public struct Presenter: View {
                         .scaleEffect(self.scaleAmount(proxy.size.width, proxy.size.height), anchor: .center)
                 }
             }.frame(minWidth: 100, maxWidth: .infinity, minHeight: 100, maxHeight: .infinity)
-                .onAppear {
-                    self.viewModel.checkAuthorization()
-                }
         }
     }
     
@@ -185,7 +179,7 @@ public struct Presenter: View {
         
         let nextSlide = slides[self.index]
         
-        self.activeTransition = (nextSlide.direction ?? self.slideDirection).next
+        self.activeTransition = (nextSlide.transition ?? self.slideTransition).next
     }
     
     private func previousSlide() {
@@ -201,15 +195,15 @@ public struct Presenter: View {
             self.index -= 1
         }
 
-        self.activeTransition = (currSlide.direction ?? self.slideDirection).previous
+        self.activeTransition = (currSlide.transition ?? self.slideTransition).previous
     }
 }
 
-public enum SlideDirection {
+public enum SlideTransition {
     case horizontal, vertical
 }
 
-extension Optional where Wrapped == SlideDirection {
+extension Optional where Wrapped == SlideTransition {
     var next: AnyTransition {
         switch self {
         case .horizontal:
