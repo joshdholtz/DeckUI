@@ -14,8 +14,8 @@ public struct Code: ContentItem {
     let enableHighlight: Bool
     let language: ProgrammingLanguage
     
-    public init(_ text: String, enableHighlight: Bool = true, language: ProgrammingLanguage = .none) {
-        self.text = text
+    public init(_ language: ProgrammingLanguage = .none, enableHighlight: Bool = true, text: () -> String) {
+        self.text = text()
         self.enableHighlight = enableHighlight
         self.language = language
     }
