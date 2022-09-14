@@ -69,7 +69,7 @@ extension ContentView {
             
             Slide {
                 Title("Images")
-                Media(.bundleImage("bill-murray"))
+                Media(.bundleImage("bill-murray.jpeg"))
             }
             
             Slide {
@@ -91,7 +91,7 @@ extension ContentView {
                     }
                     
                     Column {
-                        Media(.bundleImage("bill-murray"))
+                        Media(.assetImage("murray"))
                     }
                 }
             }
@@ -101,15 +101,15 @@ extension ContentView {
                 
                 Columns {
                     Column {
-                        Media(.bundleImage("bill-murray"))
+                        Media(.assetImage("murray"))
                     }
                     
                     Column {
-                        Media(.bundleImage("bill-murray"))
+                        Media(.assetImage("murray"))
                     }
                     
                     Column {
-                        Media(.bundleImage("bill-murray"))
+                        Media(.assetImage("murray"))
                     }
                 }
             }

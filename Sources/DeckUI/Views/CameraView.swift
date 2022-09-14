@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import AppKit
 import AVFoundation
 import SwiftUI
 import Combine
@@ -41,33 +40,42 @@ struct Camera: View {
     }
 }
 
-class CameraView: NSView {
-    
-    var previewLayer: AVCaptureVideoPreviewLayer?
+final class CameraView: PlatformView {
 
     init(captureSession: AVCaptureSession) {
+        #if canImport(AppKit)
         previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        #endif
         super.init(frame: .zero)
 
-        setupLayer()
-    }
-
-    func setupLayer() {
+        #if canImport(UIKit)
+        let previewLayer = layer as? AVCaptureVideoPreviewLayer
+        previewLayer?.session = captureSession
+        #endif
 
         previewLayer?.frame = self.frame
         previewLayer?.contentsGravity = .resizeAspectFill
         previewLayer?.videoGravity = .resizeAspectFill
         previewLayer?.connection?.automaticallyAdjustsVideoMirroring = false
+
+        #if canImport(AppKit)
         layer = previewLayer
+        #endif
     }
 
+    @available(*, unavailable, message: "Use init(captureSession:) instead")
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    #if canImport(AppKit)
+    var previewLayer: AVCaptureVideoPreviewLayer?
+    #elseif canImport(UIKit)
+    override class var layerClass: AnyClass { AVCaptureVideoPreviewLayer.self }
+    #endif
 }
 
-struct CameraContainerView: NSViewRepresentable {
-    typealias NSViewType = CameraView
+struct CameraContainerView: PlatformAgnosticViewRepresentable {
 
     let captureSession: AVCaptureSession
 
@@ -75,14 +83,14 @@ struct CameraContainerView: NSViewRepresentable {
         self.captureSession = captureSession
     }
 
-    func makeNSView(context: Context) -> CameraView {
-        return CameraView(captureSession: captureSession)
+    func makePlatformView(context: Context) -> CameraView {
+        CameraView(captureSession: captureSession)
     }
 
-    func updateNSView(_ nsView: CameraView, context: Context) { }
+    func updatePlatformView(_ platformView: CameraView, context: Context) {}
 }
 
-class ContentViewModel: ObservableObject {
+final class ContentViewModel: ObservableObject {
 
     @Published var isGranted: Bool = false
     @Published var device: AVCaptureDevice? = nil
@@ -108,11 +116,18 @@ class ContentViewModel: ObservableObject {
     }
 
     func fetchDevices() {
-        let discoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [
+        var deviceTypes: [AVCaptureDevice.DeviceType] = [
             .builtInMicrophone,
             .builtInWideAngleCamera,
-            .externalUnknown
-        ], mediaType: .video, position: .unspecified)
+        ]
+        #if os(macOS)
+        deviceTypes.append(.externalUnknown)
+        #endif
+        let discoverySession = AVCaptureDevice.DiscoverySession(
+            deviceTypes: deviceTypes,
+            mediaType: .video,
+            position: .unspecified
+        )
         self.availableDevices = discoverySession.devices
     }
     
@@ -154,7 +169,7 @@ class ContentViewModel: ObservableObject {
 
     func prepareCamera() {
         captureSession.sessionPreset = .high
-        
+
         if let device = AVCaptureDevice.default(for: .video) {
             startSessionForDevice(device)
         }
