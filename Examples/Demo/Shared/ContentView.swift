@@ -118,7 +118,8 @@ extension ContentView {
                 Title("Code Blocks", subtitle: "")
                 Columns {
                     Column {
-                        Code("""
+                        Code(.swift) {
+                        """
                         struct CounterView: View {
                             @State var count = 0
                             
@@ -138,7 +139,8 @@ extension ContentView {
                                 }.buttonStyle(.plain)
                             }
                         }
-                        """)
+                        """
+                        }
                     }
                     Column {
                         Bullets {
@@ -160,7 +162,8 @@ extension ContentView {
                     }
 
                     Column {
-                        Code("""
+                        Code(.swift) {
+                        """
                         struct CounterView: View {
                             @State var count = 0
                             
@@ -180,7 +183,8 @@ extension ContentView {
                                 }.buttonStyle(.plain)
                             }
                         }
-                        """)
+                        """
+                        }
                     }
                 }
             }
@@ -193,7 +197,8 @@ extension ContentView {
                 Title("Make Deck like...", subtitle: "Super simple")
                 Columns {
                     Column {
-                        Code("""
+                        Code(.swift) {
+                        """
                         import SwiftUI
                         import DeckUI
                         
@@ -217,7 +222,8 @@ extension ContentView {
                                 }
                             }
                         }
-                        """)
+                        """
+                        }
                     }
                     
                     Column {
@@ -234,7 +240,8 @@ extension ContentView {
                 Title("Change theme", subtitle: "On Deck or Slide")
                 Columns {
                     Column {
-                        Code("""
+                        Code(.swift) {
+                        """
                         extension Theme {
                             public static let venonat: Theme = Theme(
                                 background: Color(hex: "#624a7b"),
@@ -270,11 +277,13 @@ extension ContentView {
                                 ))
                             )
                         }
-                        """)
+                        """
+                        }
                     }
                     
                     Column {
-                        Code("""
+                        Code(.swift, enableHighlight: false) {
+                        """
                         // Set theme on presenter
                         var body: some View {
                             Presenter(deck: self.deck, theme: .venonat)
@@ -284,7 +293,8 @@ extension ContentView {
                         Slide(theme: .venonat) {
                             Title("Some slide")
                         }
-                        """, enableHighlight: false)
+                        """
+                        }
                     }
                 }
             }
@@ -293,7 +303,8 @@ extension ContentView {
                 Title("Bullets", subtitle: "")
                 Columns {
                     Column {
-                        Code("""
+                        Code(.swift) {
+                        """
                         Slide {
                             Bullets {
                                 Words("")
@@ -307,7 +318,8 @@ extension ContentView {
                                 Words("")
                             }
                         }
-                        """)
+                        """
+                        }
                     }
                     
                     Column {
@@ -324,13 +336,15 @@ extension ContentView {
                 Title("Media", subtitle: "")
                 Columns {
                     Column {
-                        Code("""
+                        Code(.swift) {
+                        """
                         Slide {
                             Media(.assetImage(""))
                             Media(.bundleImage(""))
                             Media(.remoteImage(URL(string: ""))!)
                         }
-                        """)
+                        """
+                        }
                     }
                     
                     Column {
@@ -347,9 +361,11 @@ extension ContentView {
                 Title("Columns", subtitle: "")
                 Columns {
                     Column {
-                        Code("""
+                        Code(.swift) {
+                        """
                         Slide {
-                            Code(\"\"\"
+                            Code(.swift) {
+                            \"\"\"
                             Columns {
                                 Column {
                                     Bullets {
@@ -366,9 +382,11 @@ extension ContentView {
                                     }
                                 }
                             }
-                            \"\"\")
+                            \"\"\"
+                            }
                         }
-                        """)
+                        """
+                        }
                     }
                     
                     Column {
@@ -384,9 +402,11 @@ extension ContentView {
                 Title("Code", subtitle: "")
                 Columns {
                     Column {
-                        Code("""
+                        Code(.swift) {
+                        """
                         Slide {
-                            Code(\"\"\"
+                            Code(.swift) {
+                            \"\"\"
                             Columns {
                                 Column {
                                     Bullets {
@@ -403,16 +423,18 @@ extension ContentView {
                                     }
                                 }
                             }
-                            \"\"\")
+                            \"\"\"
+                            }
                         }
-                        """)
+                        """
+                        }
                     }
                     
                     Column {
                         Bullets {
                             Words("Easily drop in any code")
                             Words("Up and down highlight lines")
-                            Words("Syntax highlight (eventually)")
+                            Words("Syntax highlight")
                         }
                     }
                 }
@@ -422,7 +444,8 @@ extension ContentView {
                 Title("RawView", subtitle: "Power is all yours")
                 Columns {
                     Column {
-                        Code("""
+                        Code(.swift) {
+                        """
                             Slide(alignment: .center) {
                                 RawView {
                                     Text("DeckUI")
@@ -432,7 +455,8 @@ extension ContentView {
                                         .border(.white.opacity(0.5), width: 20)
                                 }
                             }
-                        """)
+                        """
+                        }
                     }
                     
                     Column {
