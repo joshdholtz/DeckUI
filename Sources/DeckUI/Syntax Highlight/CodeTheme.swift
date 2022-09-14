@@ -13,6 +13,13 @@ public struct CodeTheme {
     public var plainTextColor: SwiftUI.Color
     public var backgroundColor: SwiftUI.Color
     public var tokenColors: [TokenType: SwiftUI.Color]
+
+    public init(font: SwiftUI.Font, plainTextColor: SwiftUI.Color, backgroundColor: SwiftUI.Color, tokenColors: [TokenType : SwiftUI.Color]) {
+        self.font = font
+        self.plainTextColor = plainTextColor
+        self.backgroundColor = backgroundColor
+        self.tokenColors = tokenColors
+    }
 }
 
 extension CodeTheme {
