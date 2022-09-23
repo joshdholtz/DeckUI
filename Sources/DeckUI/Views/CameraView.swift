@@ -16,7 +16,8 @@ struct Camera: View {
     
     var body: some View {
         ZStack {
-            Image(systemName: "camera.circle").resizable()
+            Image(systemName: "camera.circle")
+                .resizable()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
             CameraContainerView(captureSession: viewModel.captureSession)
