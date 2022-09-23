@@ -12,13 +12,13 @@ import Combine
 final class CameraViewModel: ObservableObject {
 
     @Published var isGranted: Bool = false
-    @Published var device: AVCaptureDevice? = nil
+    private var device: AVCaptureDevice? = nil
     @Published var availableDevices = [AVCaptureDevice]()
-    var captureSession: AVCaptureSession!
+    let captureSession = AVCaptureSession()
     private var cancellables = Set<AnyCancellable>()
+    private let sessionConfigQueue = DispatchQueue(label: "com.deckUI.CameraViewModel")
 
     init() {
-        captureSession = AVCaptureSession()
         setupBindings()
     }
 
@@ -76,16 +76,6 @@ final class CameraViewModel: ObservableObject {
         }
     }
 
-    func startSession() {
-        guard !captureSession.isRunning else { return }
-        captureSession.startRunning()
-    }
-
-    func stopSession() {
-        guard captureSession.isRunning else { return }
-        captureSession.stopRunning()
-    }
-
     func prepareCamera() {
         captureSession.sessionPreset = .high
 
@@ -97,27 +87,29 @@ final class CameraViewModel: ObservableObject {
     }
 
     func startSessionForDevice(_ device: AVCaptureDevice) {
-        do {
-            for input in captureSession.inputs {
-                captureSession.removeInput(input)
+        stopSession()
+        sessionConfigQueue.async { [captureSession, weak self] in
+            captureSession.inputs.forEach(captureSession.removeInput(_:))
+            guard
+                let input = try? AVCaptureDeviceInput(device: device),
+                captureSession.canAddInput(input)
+            else {
+                print("Can't add input for device \(device)")
+                return
             }
-
-            let input = try AVCaptureDeviceInput(device: device)
+            self?.device = device
             captureSession.beginConfiguration()
-            addInput(input)
+            captureSession.addInput(input)
             captureSession.commitConfiguration()
-            startSession()
-            self.device = device
-        }
-        catch {
-            print("Something went wrong - ", error.localizedDescription)
+            captureSession.startRunning()
+
         }
     }
 
-    func addInput(_ input: AVCaptureInput) {
-        guard captureSession.canAddInput(input) == true else {
-            return
+    func stopSession() {
+        sessionConfigQueue.sync { [captureSession] in
+            guard captureSession.isRunning else { return }
+            captureSession.stopRunning()
         }
-        captureSession.addInput(input)
     }
 }
