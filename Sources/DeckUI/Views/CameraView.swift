@@ -16,16 +16,13 @@ struct Camera: View {
     
     var body: some View {
         ZStack {
+            Image(systemName: "camera.circle").resizable()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+
             CameraContainerView(captureSession: viewModel.captureSession)
                 .onAppear {
                     self.viewModel.checkAuthorization()
                 }
-            
-            // Hack: needed to make view clickable for context menu
-            // There might be a better way to do this but meh
-            Rectangle()
-                .fill(.white.opacity(0.001))
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
             .contextMenu {
                 ForEach(self.viewModel.availableDevices, id:\.self) { device in
