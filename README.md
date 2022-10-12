@@ -8,7 +8,7 @@
 
 DeckUI is a Swift DSL (domain specific language) for writing slide decks in Xcode. It allows for quick creation of  slides and content in a language and environment you are familiar with.
 
-But _why_? 
+But _why_?
 
 Well, I made this because:
 - I was bored on an airplane
@@ -70,7 +70,7 @@ extension ContentView {
                             Words("Columns")
                         }
                     }
-                    
+
                     Column {
                         Media(.remoteImage(URL(string: "https://www.fillmurray.com/g/200/300")!))
                     }
@@ -207,7 +207,7 @@ Slide {
         Column {
             // Content
         }
-        
+
         Column {
             // Content
         }
@@ -222,7 +222,7 @@ Slide {
         Column {
             // Content
         }
-        
+
         Column {
             // Content
         }
@@ -282,7 +282,7 @@ Slide {
 
 struct CounterView: View {
     @State var count = 0
-    
+
     var body: some View {
         Button {
             self.count += 1
@@ -348,3 +348,7 @@ extension Theme {
     )
 }
 ```
+
+## DeckUI in the real world
+
+1. [FullQueueDeveloper](https://github.com/FullQueueDeveloper) presents "Pushing to the App Store using Swift" with [Swish](https://github.com/FullQueueDeveloper/Swish) & [Sh](https://github.com/FullQueueDeveloper/Sh) at GDG Omaha! [Watch the YouTube recording](https://www.youtube.com/watch?v=SxozYjWMhgU) of the presentation, and [checkout the source code on GitHub](https://github.com/FullQueueDeveloper/Deck-2022-09-13).
