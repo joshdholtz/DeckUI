@@ -8,6 +8,15 @@
         "revision" : "7f4df436eb78fe64fe2c32c58006e9949fa28ad8",
         "version" : "0.16.0"
       }
+    },
+    {
+      "identity" : "splashpython",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/yonomitt/SplashPython.git",
+      "state" : {
+        "revision" : "cc3fec6049ec45a428d94b8437daad5ed784d783",
+        "version" : "1.0.0"
+      }
     }
   ],
   "version" : 2
