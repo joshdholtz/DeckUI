@@ -6,9 +6,11 @@
 //
 
 import Splash
+import SplashPython
 
 public enum ProgrammingLanguage: String {
     case none
+    case python
     case swift
     
     var name: String {
@@ -17,6 +19,8 @@ public enum ProgrammingLanguage: String {
     
     var grammar: Grammar {
         switch self {
+        case .python:
+            return PythonGrammar()
         case .swift:
             return SwiftGrammar()
         case .none:
