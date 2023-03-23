@@ -112,18 +112,7 @@ public struct Presenter: View {
             self.isFullScreen = false
         }
         #elseif canImport(UIKit)
-        .gesture(DragGesture(minimumDistance: 3.0, coordinateSpace: .local)
-            .onEnded { value in
-                let tolerance: ClosedRange<CGFloat> = -100...100
-                switch(value.translation.width, value.translation.height) {
-                case (tolerance, ...0):  NotificationCenter.default.post(name: .keyUp, object: nil)
-                case (tolerance, 0...):  NotificationCenter.default.post(name: .keyDown, object: nil)
-                case (...0, tolerance):  presentationState.nextSlide()
-                case (0..., tolerance):  presentationState.previousSlide()
-                default:  break
-                }
-            }
-        )
+        .slideNavigationGestures()
         #endif
     }
     
