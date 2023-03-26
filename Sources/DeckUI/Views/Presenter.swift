@@ -16,18 +16,30 @@ public struct Presenter: View {
     let defaultResolution: DefaultResolution
     let showCamera: Bool
     let cameraConfig: CameraConfig
-    
-    @State var index = 0
+
+    var bindingIndex: Binding<Int>?
+    @State var stateIndex = 0
     @State var isFullScreen = false
     @State var activeTransition: AnyTransition = .slideFromTrailing
+
+    var index: Int {
+        get {
+            bindingIndex?.wrappedValue ?? stateIndex
+        }
+        nonmutating set {
+            bindingIndex?.wrappedValue = newValue
+            stateIndex = newValue
+        }
+    }
     
-    public init(deck: Deck, slideTransition: SlideTransition? = .horizontal, loop: Bool = false, defaultResolution: DefaultResolution = (width: 1920, height: 1080), showCamera: Bool = false, cameraConfig: CameraConfig = CameraConfig()) {
+    public init(deck: Deck, slideTransition: SlideTransition? = .horizontal, loop: Bool = false, defaultResolution: DefaultResolution = (width: 1920, height: 1080), showCamera: Bool = false, cameraConfig: CameraConfig = CameraConfig(), index: Binding<Int>? = nil) {
         self.deck = deck
         self.slideTransition = slideTransition
         self.loop = loop
         self.defaultResolution = defaultResolution
         self.showCamera = showCamera
         self.cameraConfig = cameraConfig
+        self.bindingIndex = index
     }
     
     var slide: Slide? {

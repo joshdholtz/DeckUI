@@ -11,6 +11,10 @@ public struct Deck {
     let title: String
     let theme: Theme
     @SlideArrayBuilder var slides: () -> [Slide]
+
+    public var slideCount: Int {
+        slides().count
+    }
     
     public init(title: String, theme: Theme = .dark, @SlideArrayBuilder slides: @escaping () -> [Slide]) {
         self.title = title
