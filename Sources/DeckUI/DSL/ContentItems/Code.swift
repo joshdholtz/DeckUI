@@ -62,14 +62,14 @@ struct CodeView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            ScrollView {
+//            ScrollView {
                 ForEach(Array(self.components.enumerated()), id:\.offset) { index, line in
                     Text(attributedString(for: line, highlight: isFocused(index)))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.vertical, 1)
                         .background(isFocused(index) ? self.theme.codeHighlighted.backgroundColor : nil)
                 }
-            }
+//            }
         }
         .onReceive(NotificationCenter.default.publisher(for: .keyUp), perform: { _ in
             if self.enableHighlight {
