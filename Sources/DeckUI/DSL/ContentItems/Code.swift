@@ -36,6 +36,7 @@ struct CodeView: View {
     let enableHighlight: Bool
     let theme: Theme
     let nonEmptyLineIndexes: [Int]
+    @Environment(\.isRenderingPDF) var isRenderingPDF
     
     @State var focusedLineIndex: Int?
     
@@ -62,12 +63,23 @@ struct CodeView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            ScrollView {
-                ForEach(Array(self.components.enumerated()), id:\.offset) { index, line in
-                    Text(attributedString(for: line, highlight: isFocused(index)))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.vertical, 1)
-                        .background(isFocused(index) ? self.theme.codeHighlighted.backgroundColor : nil)
+            if isRenderingPDF {
+                VStack {
+                    ForEach(Array(self.components.enumerated()), id:\.offset) { index, line in
+                        Text(attributedString(for: line, highlight: isFocused(index)))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.vertical, 1)
+                            .background(isFocused(index) ? self.theme.codeHighlighted.backgroundColor : nil)
+                    }
+                }
+            } else {
+                ScrollView {
+                    ForEach(Array(self.components.enumerated()), id:\.offset) { index, line in
+                        Text(attributedString(for: line, highlight: isFocused(index)))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.vertical, 1)
+                            .background(isFocused(index) ? self.theme.codeHighlighted.backgroundColor : nil)
+                    }
                 }
             }
         }
