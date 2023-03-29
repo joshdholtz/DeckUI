@@ -15,19 +15,21 @@ public struct Presenter: View {
     let loop: Bool
     let defaultResolution: DefaultResolution
     let showCamera: Bool
+    let fillScreen: Bool
     let cameraConfig: CameraConfig
     
     @State var index = 0
     @State var isFullScreen = false
     @State var activeTransition: AnyTransition = .slideFromTrailing
     
-    public init(deck: Deck, slideTransition: SlideTransition? = .horizontal, loop: Bool = false, defaultResolution: DefaultResolution = (width: 1920, height: 1080), showCamera: Bool = false, cameraConfig: CameraConfig = CameraConfig()) {
+    public init(deck: Deck, slideTransition: SlideTransition? = .horizontal, loop: Bool = false, defaultResolution: DefaultResolution = (width: 1920, height: 1080), showCamera: Bool = false, cameraConfig: CameraConfig = CameraConfig(), fillScreen: Bool = false) {
         self.deck = deck
         self.slideTransition = slideTransition
         self.loop = loop
         self.defaultResolution = defaultResolution
         self.showCamera = showCamera
         self.cameraConfig = cameraConfig
+        self.fillScreen = fillScreen
     }
     
     var slide: Slide? {
@@ -36,6 +38,18 @@ public struct Presenter: View {
             return slides[index]
         } else {
             return nil
+        }
+    }
+
+    func frameSize(_ width: Double, _ height: Double) -> CGSize {
+        if fillScreen {
+            let scaleAmount = scaleAmount(width, height)
+            return CGSize(
+                width: max(defaultResolution.width, width / scaleAmount),
+                height: max(defaultResolution.height, height / scaleAmount)
+            )
+        } else {
+            return CGSize(width: defaultResolution.width, height: defaultResolution.height)
         }
     }
     
@@ -55,12 +69,16 @@ public struct Presenter: View {
     
     public var body: some View {
         GeometryReader { proxy in
+            let size = frameSize(proxy.size.width, proxy.size.height)
             ZStack(alignment: .center) {
                 (slide?.theme ?? deck.theme).background
                 
                 self.bodyContents
                     .clipped()
-                    .frame(width: self.defaultResolution.0, height: self.defaultResolution.1, alignment: .center)
+                    .frame(
+                        width: size.width,
+                        height: size.height,
+                        alignment: .center)
                     .scaleEffect(self.scaleAmount(proxy.size.width, proxy.size.height), anchor: .center)
 
                 if self.showCamera {
