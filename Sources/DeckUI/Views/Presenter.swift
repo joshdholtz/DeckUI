@@ -175,7 +175,21 @@ public struct Presenter: View {
         }
         
         let nextSlide = slides[newIndex]
-        
+
+        // NOTE: The transition for removal used by SwiftUI
+        // is the one that was set when rendering the slide.
+        // This means that when changing navigation direction,
+        // the animation would be wrong for the first transition
+        // after changing direction.
+        // By first updating the transition (causing a re-render
+        // that doesn't change anything but the transition)
+        // And then - in the next render loop - changing the
+        // slide index, then we get the appropriate transition
+        // even when changing directions.
+        // This could be optimized to only perform the sleep
+        // upon changing directions - by remembering the previous
+        // transition direction and testing to see if it's
+        // necessary to change the transition and re-render.
         self.activeTransition = (nextSlide.transition ?? self.slideTransition).next
 
         if animated {
