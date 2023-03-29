@@ -129,17 +129,13 @@ public struct Presenter: View {
     var toolbarButtons: some View {
         Group {
             Button {
-                withAnimation {
-                    self.previousSlide()
-                }
+                self.previousSlide(animated: true)
             } label: {
                 Label("Previous", systemImage: "arrow.left")
             }.keyboardShortcut(.leftArrow, modifiers: [])
             
             Button {
-                withAnimation {
-                    self.nextSlide()
-                }
+                self.nextSlide(animated: true)
             } label: {
                 Label("Next", systemImage: "arrow.right")
             }.keyboardShortcut(.rightArrow, modifiers: [])
@@ -167,35 +163,73 @@ public struct Presenter: View {
         NotificationCenter.default.post(name: .keyDown, object: nil)
     }
     
-    private func nextSlide() {
+    private func nextSlide(animated: Bool = false) {
+        var newIndex = index
         let slides = self.deck.slides()
         if self.index >= (slides.count - 1) {
             if self.loop {
-                self.index = 0
+                newIndex = 0
             }
         } else {
-            self.index += 1
+            newIndex += 1
         }
         
-        let nextSlide = slides[self.index]
+        let nextSlide = slides[newIndex]
         
         self.activeTransition = (nextSlide.transition ?? self.slideTransition).next
+
+        if animated {
+            Task { @MainActor [newIndex] in
+                try await Task.sleep(nanoseconds: 0)
+                withAnimation {
+                    self.index = newIndex
+                }
+            }
+        } else {
+            self.index = newIndex
+        }
     }
     
-    private func previousSlide() {
+    private func previousSlide(animated: Bool = false) {
         let slides = self.deck.slides()
-
+        var newIndex = index
         let currSlide = slides[self.index]
         
         if self.index <= 0 {
             if self.loop {
-                self.index = slides.count - 1
+                newIndex = slides.count - 1
             }
         } else {
-            self.index -= 1
+            newIndex -= 1
         }
 
+        // NOTE: The transition for removal used by SwiftUI
+        // is the one that was set when rendering the slide.
+        // This means that when changing navigation direction,
+        // the animation would be wrong for the first transition
+        // after changing direction.
+        // By first updating the transition (causing a re-render
+        // that doesn't change anything but the transition)
+        // And then - in the next render loop - changing the
+        // slide index, then we get the appropriate transition
+        // even when changing directions.
+        // This could be optimized to only perform the sleep
+        // upon changing directions - by remembering the previous
+        // transition direction and testing to see if it's
+        // necessary to change the transition and re-render.
         self.activeTransition = (currSlide.transition ?? self.slideTransition).previous
+
+        if animated {
+            Task { @MainActor [newIndex] in
+                try await Task.sleep(nanoseconds: 0)
+                withAnimation {
+                    self.index = newIndex
+                }
+            }
+        } else {
+            self.index = newIndex
+        }
+
     }
 }
 
