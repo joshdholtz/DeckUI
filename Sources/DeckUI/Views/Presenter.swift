@@ -10,30 +10,31 @@ import SwiftUI
 public struct Presenter: View {
     public typealias DefaultResolution = (width: Double, height: Double)
     
+    @ObservedObject private var presentationState = PresentationState.shared
+
     let deck: Deck
-    let slideTransition: SlideTransition?
-    let loop: Bool
     let defaultResolution: DefaultResolution
     let showCamera: Bool
     let cameraConfig: CameraConfig
     
-    @State var index = 0
     @State var isFullScreen = false
-    @State var activeTransition: AnyTransition = .slideFromTrailing
     
     public init(deck: Deck, slideTransition: SlideTransition? = .horizontal, loop: Bool = false, defaultResolution: DefaultResolution = (width: 1920, height: 1080), showCamera: Bool = false, cameraConfig: CameraConfig = CameraConfig()) {
+
         self.deck = deck
-        self.slideTransition = slideTransition
-        self.loop = loop
         self.defaultResolution = defaultResolution
         self.showCamera = showCamera
         self.cameraConfig = cameraConfig
+        self.presentationState.deck = deck
+        self.presentationState.loop = loop
+        self.presentationState.slideTransition = slideTransition
     }
     
+    // If we can turn this into an environment variable or observable object, presenter notes and potentially controls become way easier?
     var slide: Slide? {
         let slides = self.deck.slides()
-        if slides.count > index {
-            return slides[index]
+        if slides.count > presentationState.slideIndex {
+            return slides[presentationState.slideIndex]
         } else {
             return nil
         }
@@ -82,25 +83,25 @@ public struct Presenter: View {
         ZStack {
             if self.isFullScreen {
                 VStack {
-                    self.toolbarButtons
+                    SlideNavigationToolbarButtons()
                 }.opacity(0)
             }
             
             ForEach(Array(self.deck.slides().enumerated()), id: \.offset) { index, slide in
                 
-                if index == self.index {
+                if index == presentationState.slideIndex {
                     slide.buildView(theme: self.deck.theme)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .zIndex(Double(self.index))
+                        .zIndex(Double(presentationState.slideIndex))
                 }
-            }.transition(self.activeTransition)
+            }.transition(presentationState.activeTransition)
         }
         .navigationTitle(self.deck.title)
         #if canImport(AppKit)
         .if(!self.isFullScreen) {
             $0.toolbar {
                 ToolbarItemGroup {
-                    self.toolbarButtons
+                    SlideNavigationToolbarButtons()
                 }
             }
         }
@@ -115,10 +116,10 @@ public struct Presenter: View {
             .onEnded { value in
                 let tolerance: ClosedRange<CGFloat> = -100...100
                 switch(value.translation.width, value.translation.height) {
-                case (tolerance, ...0):  lineUp()
-                case (tolerance, 0...):  lineDown()
-                case (...0, tolerance):  nextSlide()
-                case (0..., tolerance):  previousSlide()
+                case (tolerance, ...0):  NotificationCenter.default.post(name: .keyUp, object: nil)
+                case (tolerance, 0...):  NotificationCenter.default.post(name: .keyDown, object: nil)
+                case (...0, tolerance):  presentationState.nextSlide()
+                case (0..., tolerance):  presentationState.previousSlide()
                 default:  break
                 }
             }
@@ -126,77 +127,7 @@ public struct Presenter: View {
         #endif
     }
     
-    var toolbarButtons: some View {
-        Group {
-            Button {
-                withAnimation {
-                    self.previousSlide()
-                }
-            } label: {
-                Label("Previous", systemImage: "arrow.left")
-            }.keyboardShortcut(.leftArrow, modifiers: [])
-            
-            Button {
-                withAnimation {
-                    self.nextSlide()
-                }
-            } label: {
-                Label("Next", systemImage: "arrow.right")
-            }.keyboardShortcut(.rightArrow, modifiers: [])
-            
-            Button {
-                lineDown()
 
-            } label: {
-                Label("Down", systemImage: "arrow.down")
-            }.keyboardShortcut(.downArrow, modifiers: [])
-            
-            Button {
-                lineUp()
-            } label: {
-                Label("Up", systemImage: "arrow.up")
-            }.keyboardShortcut(.upArrow, modifiers: [])
-        }
-    }
-
-    private func lineUp() {
-        NotificationCenter.default.post(name: .keyUp, object: nil)
-    }
-
-    private func lineDown() {
-        NotificationCenter.default.post(name: .keyDown, object: nil)
-    }
-    
-    private func nextSlide() {
-        let slides = self.deck.slides()
-        if self.index >= (slides.count - 1) {
-            if self.loop {
-                self.index = 0
-            }
-        } else {
-            self.index += 1
-        }
-        
-        let nextSlide = slides[self.index]
-        
-        self.activeTransition = (nextSlide.transition ?? self.slideTransition).next
-    }
-    
-    private func previousSlide() {
-        let slides = self.deck.slides()
-
-        let currSlide = slides[self.index]
-        
-        if self.index <= 0 {
-            if self.loop {
-                self.index = slides.count - 1
-            }
-        } else {
-            self.index -= 1
-        }
-
-        self.activeTransition = (currSlide.transition ?? self.slideTransition).previous
-    }
 }
 
 public enum SlideTransition {
@@ -282,4 +213,5 @@ extension View {
 extension NSNotification.Name {
     static let keyUp = NSNotification.Name("presenter_pressed_up")
     static let keyDown = NSNotification.Name("presenter_pressed_down")
+    static let slideChanged = NSNotification.Name("slide_changed")
 }
