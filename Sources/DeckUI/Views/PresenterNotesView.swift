@@ -10,8 +10,15 @@ public struct PresenterNotesView: View {
     @ObservedObject private var presentationState = PresentationState.shared
     
     public var body: some View {
-        Text(presentationState.deck.slides()[presentationState.slideIndex].comment ?? "No notes")
-        .frame(minWidth: 100, maxWidth: .infinity, minHeight: 100, maxHeight: .infinity)
+        Group{
+            Text(presentationState.deck.slides()[presentationState.slideIndex].comment ?? "No notes")
+
+        }.frame(maxWidth:.infinity, maxHeight: .infinity)
+            .background(.background)
+        #if canImport(UIKit)
+        .slideNavigationGestures()
+        #endif
+        
     }
     public init() {
     }
