@@ -55,6 +55,12 @@ public struct Theme {
         }
     }
     
+    public mutating func merge(_ theme: Theme) {
+        for (identifier, value) in theme.values {
+            values[identifier] = value
+        }
+    }
+    
     public var background: Color {
         get { self[BackgroundColorKey.self] }
         set { self[BackgroundColorKey.self] = newValue }
