@@ -81,4 +81,12 @@ public enum ColumnArrayBuilder {
     public static func buildExpression(_ expression: Void) -> [Column] {
         return []
     }
+    
+    public static func buildExpression(_ expression: [Column]) -> [Column] {
+        return expression
+    }
+    
+    public static func buildArray(_ components: [[Column]]) -> [Column] {
+        return components.flatMap { $0 }
+    }
 }
