@@ -74,4 +74,12 @@ public enum WordArrayBuilder {
     public static func buildExpression(_ expression: Void) -> [Words] {
         return []
     }
+    
+    public static func buildExpression(_ expression: [Words]) -> [Words] {
+        return expression
+    }
+    
+    public static func buildArray(_ components: [[Words]]) -> [Words] {
+        return components.flatMap { $0 }
+    }
 }
