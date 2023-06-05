@@ -80,4 +80,12 @@ public enum SlideArrayBuilder {
     public static func buildExpression(_ expression: Void) -> [Slide] {
         return []
     }
+    
+    public static func buildExpression(_ expression: [Slide]) -> [Slide] {
+        return expression
+    }
+    
+    public static func buildArray(_ components: [[Slide]]) -> [Slide] {
+        return components.flatMap { $0 }
+    }
 }

@@ -17,7 +17,7 @@ struct ContentView: View {
 extension ContentView {
     var deck: Deck {
         Deck(title: "DeckUI Demo") {
-            Slide(alignment: .center) {
+            Slide(alignment: .center, comment: "Here are some presenter notes") {
                 Title("Introducing...")
             }
             
@@ -40,7 +40,7 @@ extension ContentView {
                 }
             }
             
-            Slide(alignment: .center) {
+            Slide(alignment: .center, comment: "The presenter notes are back!") {
                 Title("But why?")
             }
             

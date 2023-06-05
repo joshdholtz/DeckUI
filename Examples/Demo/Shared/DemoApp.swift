@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
-
+import DeckUI
 @main
 struct DemoApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
+        #if canImport(AppKit)
+        PresenterNotes()
+        #endif
     }
 }
