@@ -11,17 +11,13 @@ public struct SlideNavigationToolbarButtons: View {
     public var body: some View {
         Group {
             Button {
-                withAnimation {
-                    PresentationState.shared.previousSlide()
-                }
+                PresentationState.shared.previousSlide(animated: true)
             } label: {
                 Label("Previous", systemImage: "arrow.left")
             }.keyboardShortcut(.leftArrow, modifiers: [])
             
             Button {
-                withAnimation {
-                    PresentationState.shared.nextSlide()
-                }
+                PresentationState.shared.nextSlide(animated: true)
             } label: {
                 Label("Next", systemImage: "arrow.right")
             }.keyboardShortcut(.rightArrow, modifiers: [])

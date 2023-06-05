@@ -125,9 +125,7 @@ public struct Presenter: View {
             }
         )
         #endif
-    }
-    
-
+    }    
 }
 
 public enum SlideTransition {

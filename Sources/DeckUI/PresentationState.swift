@@ -65,40 +65,86 @@ open class PresentationState: ObservableObject {
                 }
             }
         }
-    public func nextSlide() {
+
+    public func nextSlide(animated: Bool = false) {
+        var newIndex = self.slideIndex
         let slides = self.deck.slides()
-        if slideIndex >= (slides.count - 1) {
+        if newIndex >= (slides.count - 1) {
             if self.loop {
-                slideIndex = 0
+                newIndex = 0
             }
         } else {
-            slideIndex += 1
+            newIndex += 1
         }
-        
-        let nextSlide = slides[slideIndex]
-        
-        self.activeTransition = (nextSlide.transition ?? self.slideTransition).next
-        NotificationCenter.default.post(name: .slideChanged, object: nextSlide)
 
+        let nextSlide = slides[newIndex]
+
+        // NOTE: The transition for removal used by SwiftUI
+        // is the one that was set when rendering the slide.
+        // This means that when changing navigation direction,
+        // the animation would be wrong for the first transition
+        // after changing direction.
+        // By first updating the transition (causing a re-render
+        // that doesn't change anything but the transition)
+        // And then - in the next render loop - changing the
+        // slide index, then we get the appropriate transition
+        // even when changing directions.
+        // This could be optimized to only perform the sleep
+        // upon changing directions - by remembering the previous
+        // transition direction and testing to see if it's
+        // necessary to change the transition and re-render.
+        self.activeTransition = (nextSlide.transition ?? self.slideTransition).next
+
+        if animated {
+            Task { @MainActor [newIndex] in
+                try await Task.sleep(nanoseconds: 0)
+                withAnimation {
+                    self.slideIndex = newIndex
+                }
+            }
+        } else {
+            self.slideIndex = newIndex
+        }
     }
     
-    public func previousSlide() {
+    public func previousSlide(animated: Bool = false) {
         let slides = self.deck.slides()
+        var newIndex = self.slideIndex
+        let currSlide = slides[self.slideIndex]
 
-        let currentSlide = slides[slideIndex]
-        
-        if slideIndex <= 0 {
+        if newIndex <= 0 {
             if self.loop {
-                slideIndex = slides.count - 1
+                newIndex = slides.count - 1
             }
         } else {
-            slideIndex -= 1
+            newIndex -= 1
         }
 
-        let previousSlide = slides[slideIndex]
-        
-        self.activeTransition = (currentSlide.transition ?? self.slideTransition).previous
-        NotificationCenter.default.post(name: .slideChanged, object: previousSlide)
+        // NOTE: The transition for removal used by SwiftUI
+        // is the one that was set when rendering the slide.
+        // This means that when changing navigation direction,
+        // the animation would be wrong for the first transition
+        // after changing direction.
+        // By first updating the transition (causing a re-render
+        // that doesn't change anything but the transition)
+        // And then - in the next render loop - changing the
+        // slide index, then we get the appropriate transition
+        // even when changing directions.
+        // This could be optimized to only perform the sleep
+        // upon changing directions - by remembering the previous
+        // transition direction and testing to see if it's
+        // necessary to change the transition and re-render.
+        self.activeTransition = (currSlide.transition ?? self.slideTransition).previous
 
+        if animated {
+            Task { @MainActor [newIndex] in
+                try await Task.sleep(nanoseconds: 0)
+                withAnimation {
+                    self.slideIndex = newIndex
+                }
+            }
+        } else {
+            self.slideIndex = newIndex
+        }
     }
 }
