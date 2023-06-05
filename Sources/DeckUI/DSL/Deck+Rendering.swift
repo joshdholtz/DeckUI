@@ -21,7 +21,7 @@ extension EnvironmentValues {
 
 extension Deck {
     @MainActor
-    @available(macOS 13.0, *)
+    @available(macOS 13.0, iOS 16.0, *)
     public func render(size: CGSize,
                        rasterizationScale: CGFloat = 2,
                        url: URL = .documentsDirectory.appending(path: "output.pdf")) -> URL {

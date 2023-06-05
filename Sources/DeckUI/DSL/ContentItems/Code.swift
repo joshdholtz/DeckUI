@@ -60,26 +60,25 @@ struct CodeView: View {
             }
         }
     }
+
+    private var content: some View {
+        ForEach(Array(self.components.enumerated()), id:\.offset) { index, line in
+            Text(attributedString(for: line, highlight: isFocused(index)))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.vertical, 1)
+                .background(isFocused(index) ? self.theme.codeHighlighted.backgroundColor : nil)
+        }
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             if isRenderingPDF {
                 VStack {
-                    ForEach(Array(self.components.enumerated()), id:\.offset) { index, line in
-                        Text(attributedString(for: line, highlight: isFocused(index)))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.vertical, 1)
-                            .background(isFocused(index) ? self.theme.codeHighlighted.backgroundColor : nil)
-                    }
+                    content
                 }
             } else {
                 ScrollView {
-                    ForEach(Array(self.components.enumerated()), id:\.offset) { index, line in
-                        Text(attributedString(for: line, highlight: isFocused(index)))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.vertical, 1)
-                            .background(isFocused(index) ? self.theme.codeHighlighted.backgroundColor : nil)
-                    }
+                    content
                 }
             }
         }
