@@ -43,3 +43,20 @@ public struct SlideNavigationToolbarButtons: View {
         
     }
 }
+
+extension View {
+    public func slideNavigationGestures() -> some View {
+        return gesture(DragGesture(minimumDistance: 3.0, coordinateSpace: .local)
+            .onEnded { value in
+                let tolerance: ClosedRange<CGFloat> = -100...100
+                switch(value.translation.width, value.translation.height) {
+                case (tolerance, ...0):  NotificationCenter.default.post(name: .keyUp, object: nil)
+                case (tolerance, 0...):  NotificationCenter.default.post(name: .keyDown, object: nil)
+                case (...0, tolerance):  PresentationState.shared.nextSlide()
+                case (0..., tolerance):  PresentationState.shared.previousSlide()
+                default:  break
+                }
+            }
+        )
+    }
+}

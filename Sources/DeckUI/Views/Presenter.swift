@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import Combine
 public struct Presenter: View {
     public typealias DefaultResolution = (width: Double, height: Double)
     
@@ -29,7 +29,7 @@ public struct Presenter: View {
         self.presentationState.loop = loop
         self.presentationState.slideTransition = slideTransition
     }
-    
+
     // If we can turn this into an environment variable or observable object, presenter notes and potentially controls become way easier?
     var slide: Slide? {
         let slides = self.deck.slides()
@@ -53,8 +53,27 @@ public struct Presenter: View {
             return widthScale
         }
     }
-    
     public var body: some View {
+        #if canImport(UIKit)
+        if isExternalDisplayConnected && !isAirplayDisplayVersion {
+            PresenterNotesView()
+        } else {
+            self.presenterViewBody
+                .onReceive(
+                    screenDidConnectPublisher,
+                    perform: screenDidConnect
+                )
+                .onReceive(
+                    screenDidDisconnectPublisher,
+                    perform: screenDidDisconnect
+                )
+        }
+        #else
+        self.presenterViewBody
+        #endif
+        
+    }
+    public var presenterViewBody: some View {
         GeometryReader { proxy in
             ZStack(alignment: .center) {
                 (slide?.theme ?? deck.theme).background
@@ -112,23 +131,60 @@ public struct Presenter: View {
             self.isFullScreen = false
         }
         #elseif canImport(UIKit)
-        .gesture(DragGesture(minimumDistance: 3.0, coordinateSpace: .local)
-            .onEnded { value in
-                let tolerance: ClosedRange<CGFloat> = -100...100
-                switch(value.translation.width, value.translation.height) {
-                case (tolerance, ...0):  NotificationCenter.default.post(name: .keyUp, object: nil)
-                case (tolerance, 0...):  NotificationCenter.default.post(name: .keyDown, object: nil)
-                case (...0, tolerance):  presentationState.nextSlide()
-                case (0..., tolerance):  presentationState.previousSlide()
-                default:  break
-                }
-            }
-        )
+        .slideNavigationGestures()
         #endif
     }
     
 
+    #if canImport(UIKit)
+    private func externalView() -> Presenter {
+        var selfCopy = self
+        selfCopy.isAirplayDisplayVersion = true
+        return selfCopy
+    }
+    
+    var isAirplayDisplayVersion = false
+    
+    @State var isExternalDisplayConnected: Bool = (UIApplication.shared.connectedScenes.count > 1)
+    @State var additionalWindows: [UIWindow] = []
+
+    private var screenDidConnectPublisher: AnyPublisher<UIScreen, Never> {
+        NotificationCenter.default
+            .publisher(for: UIScreen.didConnectNotification)
+            .compactMap { $0.object as? UIScreen }
+            .receive(on: RunLoop.main)
+            .eraseToAnyPublisher()
+    }
+
+    private var screenDidDisconnectPublisher: AnyPublisher<UIScreen, Never> {
+        NotificationCenter.default
+            .publisher(for: UIScreen.didDisconnectNotification)
+            .compactMap { $0.object as? UIScreen }
+            .receive(on: RunLoop.main)
+            .eraseToAnyPublisher()
+    }
+
+    private func screenDidConnect(_ screen: UIScreen) {
+        let window = UIWindow(frame: screen.bounds)
+
+        window.windowScene = UIApplication.shared.connectedScenes
+            .first { ($0 as? UIWindowScene)?.screen == screen }
+            as? UIWindowScene
+
+        let controller = UIHostingController(rootView: self.externalView())
+        window.rootViewController = controller
+        window.isHidden = false
+        additionalWindows.append(window)
+        self.isExternalDisplayConnected = true
+    }
+
+    private func screenDidDisconnect(_ screen: UIScreen) {
+        additionalWindows.removeAll { $0.screen == screen }
+        self.isExternalDisplayConnected = false
+    }
+    #endif
 }
+
 
 public enum SlideTransition {
     case horizontal, vertical
