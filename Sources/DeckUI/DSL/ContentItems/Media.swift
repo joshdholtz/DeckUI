@@ -11,9 +11,22 @@ import Foundation
 import AVKit
 
 public struct Media: ContentItem {
+    public enum VideoSource {
+        case bundle(name: String)
+    }
+
+    public struct VideoOptions {
+        let autoplay: Bool
+    }
+
     public enum Kind {
         case remoteImage(URL), assetImage(String), bundleImage(String)
-        case bundleVideo(String)
+        case video(source: VideoSource, options: VideoOptions)
+
+        public static func bundleVideo(_ name: String, autoplay: Bool = true) -> Kind {
+            .video(source: .bundle(name: name), options: .init(autoplay: autoplay))
+        }
+
         
         var view: some View {
             Group {
@@ -44,12 +57,15 @@ public struct Media: ContentItem {
                     Image(platformImage: platformImage!)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                case .bundleVideo(let name):
+                case let .video(.bundle(name), options):
                     let url = Bundle.main.url(forResource: name, withExtension: nil)!
                     let player = AVPlayer(url: url)
-                    VideoPlayer(player: player).task {
-                        await player.play()
-                    }
+                    VideoPlayer(player: player)
+                        .onAppear {
+                            if options.autoplay {
+                                player.play()
+                            }
+                        }
                 }
             }
         }
