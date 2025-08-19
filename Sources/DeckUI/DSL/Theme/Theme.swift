@@ -8,13 +8,12 @@
 import SwiftUI
 
 public struct Theme {
-    var background: Color
-    var title: Foreground
-    var subtitle: Foreground
-    var body: Foreground
     
-    public var code: CodeTheme
-    public var codeHighlighted: CodeTheme
+    var values: [ObjectIdentifier: Any] = [:]
+    
+    public init() {
+        self = Theme.black
+    }
     
     public init(background: Color, title: Foreground, subtitle: Foreground, body: Foreground, code: Foreground, codeHighlighted: (Color, Foreground)) {
         self.background = background
@@ -41,6 +40,55 @@ public struct Theme {
         self.body = body
         self.code = code
         self.codeHighlighted = codeHighlighted
+    }
+    
+    public subscript<Key: ThemeKey>(key: Key.Type) -> Key.Value {
+        get {
+            if let value = values[ObjectIdentifier(key)] as? Key.Value {
+                return value
+            } else {
+                return Key.defaultValue
+            }
+        }
+        set {
+            values[ObjectIdentifier(key)] = newValue
+        }
+    }
+    
+    public mutating func merge(_ theme: Theme) {
+        for (identifier, value) in theme.values {
+            values[identifier] = value
+        }
+    }
+    
+    public var background: Color {
+        get { self[BackgroundColorKey.self] }
+        set { self[BackgroundColorKey.self] = newValue }
+    }
+    
+    public var title: Foreground {
+        get { self[TitleKey.self] }
+        set { self[TitleKey.self] = newValue }
+    }
+    
+    public var subtitle: Foreground {
+        get { self[SubtitleKey.self] }
+        set { self[SubtitleKey.self] = newValue }
+    }
+    
+    public var body: Foreground {
+        get { self[BodyKey.self] }
+        set { self[BodyKey.self] = newValue }
+    }
+    
+    public var code: CodeTheme {
+        get { self[CodeKey.self] }
+        set { self[CodeKey.self] = newValue }
+    }
+    
+    public var codeHighlighted: CodeTheme {
+        get { self[HighlightedCodeKey.self] }
+        set { self[HighlightedCodeKey.self] = newValue }
     }
 }
 
