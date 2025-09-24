@@ -8,10 +8,10 @@
 import SwiftUI
 
 public struct Theme {
-    var background: Color
-    var title: Foreground
-    var subtitle: Foreground
-    var body: Foreground
+    public var background: Color
+    public var title: Foreground
+    public var subtitle: Foreground
+    public var body: Foreground
     
     public var code: CodeTheme
     public var codeHighlighted: CodeTheme
@@ -45,8 +45,8 @@ public struct Theme {
 }
 
 public struct Foreground {
-    let color: Color
-    let font: Font
+    public let color: Color
+    public let font: Font
     
     public init(color: Color, font: Font) {
         self.color = color
