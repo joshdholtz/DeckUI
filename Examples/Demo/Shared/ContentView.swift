@@ -62,6 +62,208 @@ extension ContentView {
                 Words("Slides can be center aligned")
             }
 
+            Slide {
+                Title("Ruby Code Example")
+                Code(.ruby) {
+                    """
+                    class Person
+                      attr_accessor :name, :age
+
+                      def initialize(name, age = 0)
+                        @name = name
+                        @age = age
+                      end
+
+                      def greet
+                        puts "Hello, my name is #{@name}"
+                        puts "I am #{@age} years old" if @age > 0
+                      end
+
+                      private
+
+                      def secret_method
+                        # This is a private method
+                        :secret_value
+                      end
+                    end
+
+                    person = Person.new("Alice", 30)
+                    person.greet
+                    """
+                }
+            }
+
+            Slide {
+                Title("Objective-C Code Example")
+                Code(.objc) {
+                    """
+                    #import <Foundation/Foundation.h>
+
+                    @interface Person : NSObject
+
+                    @property (nonatomic, strong) NSString *name;
+                    @property (nonatomic, assign) NSInteger age;
+
+                    - (instancetype)initWithName:(NSString *)name age:(NSInteger)age;
+                    - (void)greet;
+
+                    @end
+
+                    @implementation Person
+
+                    - (instancetype)initWithName:(NSString *)name age:(NSInteger)age {
+                        self = [super init];
+                        if (self) {
+                            _name = name;
+                            _age = age;
+                        }
+                        return self;
+                    }
+
+                    - (void)greet {
+                        NSLog(@"Hello, my name is %@", self.name);
+                        if (self.age > 0) {
+                            NSLog(@"I am %ld years old", (long)self.age);
+                        }
+                    }
+
+                    @end
+                    """
+                }
+            }
+
+            Slide {
+                Title("Bash Script Example")
+                Code(.bash) {
+                    """
+                    #!/bin/bash
+
+                    # Function to greet a user
+                    greet_user() {
+                        local name=$1
+                        local age=$2
+
+                        echo "Hello, my name is $name"
+
+                        if [ "$age" -gt 0 ]; then
+                            echo "I am $age years old"
+                        fi
+                    }
+
+                    # Main script
+                    USERNAME="Alice"
+                    AGE=30
+
+                    # Check if user exists
+                    if [ -n "$USERNAME" ]; then
+                        greet_user "$USERNAME" "$AGE"
+                    else
+                        echo "No username provided"
+                        exit 1
+                    fi
+
+                    # List files with colors
+                    ls -la --color=auto | grep -E "^d"
+                    """
+                }
+            }
+
+            Slide {
+                Title("SQL Query Example")
+                Code(.sql) {
+                    """
+                    -- Create a users table
+                    CREATE TABLE users (
+                        id INTEGER PRIMARY KEY,
+                        name VARCHAR(100) NOT NULL,
+                        email VARCHAR(255) UNIQUE,
+                        age INTEGER CHECK (age >= 0),
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    );
+
+                    -- Insert some sample data
+                    INSERT INTO users (name, email, age) VALUES
+                        ('Alice', 'alice@example.com', 30),
+                        ('Bob', 'bob@example.com', 25);
+
+                    -- Query with JOIN and aggregation
+                    SELECT
+                        u.name,
+                        COUNT(o.id) AS order_count,
+                        AVG(o.total) AS avg_order_value
+                    FROM users u
+                    LEFT JOIN orders o ON u.id = o.user_id
+                    WHERE u.age >= 18
+                    GROUP BY u.id, u.name
+                    HAVING COUNT(o.id) > 0
+                    ORDER BY order_count DESC
+                    LIMIT 10;
+                    """
+                }
+            }
+
+            Slide {
+                Title("HTML Example")
+                Code(.html) {
+                    """
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>DeckUI Demo</title>
+                        <style>
+                            .container { max-width: 800px; margin: 0 auto; }
+                            .highlight { color: #ff79b3; font-weight: bold; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="container">
+                            <h1 id="main-title">Welcome to DeckUI</h1>
+                            <p class="highlight">
+                                Build presentations with <strong>Swift</strong>!
+                            </p>
+                            <button onclick="alert('Hello!')">Click Me</button>
+
+                            <!-- This is a comment -->
+                            <form action="/submit" method="post">
+                                <input type="text" name="username" placeholder="Enter name" required>
+                                <button type="submit">Submit</button>
+                            </form>
+                        </div>
+                    </body>
+                    </html>
+                    """
+                }
+            }
+
+            Slide {
+                Title("Regex Pattern Example")
+                Code(.regex) {
+                    """
+                    # Email validation pattern
+                    ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$
+
+                    # Phone number formats
+                    \\(?\\d{3}\\)?[-. ]?\\d{3}[-. ]?\\d{4}
+
+                    # URL matching
+                    https?://(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&/=]*)
+
+                    # IPv4 address
+                    \\b(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\b
+
+                    # Date formats (MM/DD/YYYY or DD-MM-YYYY)
+                    (?:0[1-9]|1[0-2])[/](?:0[1-9]|[12][0-9]|3[01])[/]\\d{4}|(?:0[1-9]|[12][0-9]|3[01])[-](?:0[1-9]|1[0-2])[-]\\d{4}
+
+                    # Lookahead/lookbehind assertions
+                    (?<=@)[^@]+(?=\\.)  # Domain part of email
+                    \\w+(?=ing\\b)       # Words ending in 'ing'
+                    (?<!un)important   # 'important' not preceded by 'un'
+                    """
+                }
+            }
+
             Slide(alignment: .top) {
                 Title("Top alignment")
                 Words("Slides also be top aligned")

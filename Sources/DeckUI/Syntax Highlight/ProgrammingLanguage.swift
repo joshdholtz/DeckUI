@@ -13,6 +13,9 @@ public enum ProgrammingLanguage: String {
     case objc
     case ruby
     case bash
+    case sql
+    case html
+    case regex
 
     var name: String {
         rawValue
