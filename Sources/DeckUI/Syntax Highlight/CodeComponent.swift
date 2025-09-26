@@ -5,13 +5,13 @@
 //  Created by Yonatan Mittlefehldt on 2022-09-09.
 //
 
-import Splash
+import Foundation
 
-enum CodeComponent: Equatable, Hashable {    
+enum CodeComponent: Equatable, Hashable {
     case token(String, TokenType)
     case plainText(String)
     case whitespace(String)
-    
+
     var isWhitespace: Bool {
         switch self {
         case .whitespace(_):

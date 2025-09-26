@@ -5,7 +5,6 @@
 //  Created by Josh Holtz on 8/30/22.
 //
 
-import Splash
 import SwiftUI
 
 public struct Code: ContentItem {
@@ -13,16 +12,15 @@ public struct Code: ContentItem {
     let text: String
     let enableHighlight: Bool
     let language: ProgrammingLanguage
-    
+
     public init(_ language: ProgrammingLanguage = .none, enableHighlight: Bool = true, text: () -> String) {
         self.text = text()
         self.enableHighlight = enableHighlight
         self.language = language
     }
-    
+
     public func buildView(theme: Theme) -> AnyView {
-        let format = CodeComponentFormat()
-        let highlighter = SyntaxHighlighter(format: format, grammar: self.language.grammar)
+        let highlighter = SyntaxHighlighter(language: self.language)
         let components = highlighter.highlight(self.text)
 
         return AnyView(

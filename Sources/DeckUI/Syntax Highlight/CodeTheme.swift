@@ -5,7 +5,6 @@
 //  Created by Yonatan Mittlefehldt on 2022-09-09.
 //
 
-import Splash
 import SwiftUI
 
 public struct CodeTheme {
@@ -63,6 +62,23 @@ extension CodeTheme {
             .property:      Color(hex: "#79c2b4"),
             .dotAccess:     Color(hex: "#79c2b4"),
             .preprocessing: Color(hex: "#ffa14f")
+        ]
+    )
+
+    public static let xcodeLight: CodeTheme = CodeTheme(
+        font: Font.system(size: 22, weight: .regular, design: .monospaced),
+        plainTextColor: Color(hex: "#000000"),
+        backgroundColor: .clear,
+        tokenColors: [
+            .keyword:       Color(hex: "#9b2393"),
+            .string:        Color(hex: "#d12f1b"),
+            .type:          Color(hex: "#703daa"),
+            .call:          Color(hex: "#3e8087"),
+            .number:        Color(hex: "#272ad8"),
+            .comment:       Color(hex: "#5d6c79"),
+            .property:      Color(hex: "#3e8087"),
+            .dotAccess:     Color(hex: "#3e8087"),
+            .preprocessing: Color(hex: "#78492a")
         ]
     )
 }

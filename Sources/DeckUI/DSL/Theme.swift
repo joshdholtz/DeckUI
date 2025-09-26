@@ -72,10 +72,22 @@ extension Theme {
             font: Font.system(size: 40, weight: .regular, design: .default)
         ),
         code: .xcodeDark,
-        codeHighlighted: (Color(hex: "#000000"), Foreground(
-            color: Color(hex: "#FFFFFF"),
-            font: Font.system(size: 22, weight: .heavy, design: .monospaced)
-        ))
+        codeHighlighted: CodeTheme(
+            font: Font.system(size: 22, weight: .heavy, design: .monospaced),
+            plainTextColor: Color(hex: "#FFFFFF"),
+            backgroundColor: Color(hex: "#000000"),
+            tokenColors: [
+                .keyword:       Color(hex: "#ff79b3"),
+                .string:        Color(hex: "#ff8170"),
+                .type:          Color(hex: "#dabaff"),
+                .call:          Color(hex: "#78c2b4"),
+                .number:        Color(hex: "#dac87c"),
+                .comment:       Color(hex: "#808b98"),
+                .property:      Color(hex: "#79c2b4"),
+                .dotAccess:     Color(hex: "#79c2b4"),
+                .preprocessing: Color(hex: "#ffa14f")
+            ]
+        )
     )
     
     public static let black: Theme = Theme(
@@ -92,14 +104,23 @@ extension Theme {
             color: Color(hex: "#FFFFFF"),
             font: Font.system(size: 40, weight: .regular, design: .default)
         ),
-        code: Foreground(
-            color: Color(hex: "#FFFFFF"),
-            font: Font.system(size: 22, weight: .regular, design: .monospaced)
-        ),
-        codeHighlighted: (Color(hex: "#CCCCCC"), Foreground(
-            color: Color(hex: "#000000"),
-            font: Font.system(size: 22, weight: .heavy, design: .monospaced)
-        ))
+        code: .xcodeDark,
+        codeHighlighted: CodeTheme(
+            font: Font.system(size: 22, weight: .heavy, design: .monospaced),
+            plainTextColor: Color(hex: "#000000"),
+            backgroundColor: Color(hex: "#CCCCCC"),
+            tokenColors: [
+                .keyword:       Color(hex: "#ff79b3"),
+                .string:        Color(hex: "#ff8170"),
+                .type:          Color(hex: "#dabaff"),
+                .call:          Color(hex: "#78c2b4"),
+                .number:        Color(hex: "#dac87c"),
+                .comment:       Color(hex: "#808b98"),
+                .property:      Color(hex: "#79c2b4"),
+                .dotAccess:     Color(hex: "#79c2b4"),
+                .preprocessing: Color(hex: "#ffa14f")
+            ]
+        )
     )
     
     public static let white: Theme = Theme(
@@ -116,14 +137,23 @@ extension Theme {
             color: Color(hex: "#000000"),
             font: Font.system(size: 40, weight: .regular, design: .default)
         ),
-        code: Foreground(
-            color: Color(hex: "#000000"),
-            font: Font.system(size: 22, weight: .regular, design: .monospaced)
-        ),
-        codeHighlighted: (Color(hex: "#000000"), Foreground(
-            color: Color(hex: "#FFFFFF"),
-            font: Font.system(size: 22, weight: .heavy, design: .monospaced)
-        ))
+        code: .xcodeLight,
+        codeHighlighted: CodeTheme(
+            font: Font.system(size: 22, weight: .heavy, design: .monospaced),
+            plainTextColor: Color(hex: "#FFFFFF"),
+            backgroundColor: Color(hex: "#000000"),
+            tokenColors: [
+                .keyword:       Color(hex: "#ff79b3"),
+                .string:        Color(hex: "#ff8170"),
+                .type:          Color(hex: "#dabaff"),
+                .call:          Color(hex: "#78c2b4"),
+                .number:        Color(hex: "#dac87c"),
+                .comment:       Color(hex: "#808b98"),
+                .property:      Color(hex: "#79c2b4"),
+                .dotAccess:     Color(hex: "#79c2b4"),
+                .preprocessing: Color(hex: "#ffa14f")
+            ]
+        )
     )
 }
 
