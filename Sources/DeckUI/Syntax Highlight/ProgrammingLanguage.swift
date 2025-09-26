@@ -10,6 +10,9 @@ import Splash
 public enum ProgrammingLanguage: String {
     case none
     case swift
+    case objc
+    case ruby
+    case bash
     
     var name: String {
         rawValue
@@ -19,6 +22,12 @@ public enum ProgrammingLanguage: String {
         switch self {
         case .swift:
             return SwiftGrammar()
+        case .objc:
+            return NoGammar()
+        case .ruby:
+            return NoGammar()
+        case .bash:
+            return NoGammar()
         case .none:
             return NoGammar()
         }
