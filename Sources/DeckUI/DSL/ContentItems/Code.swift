@@ -12,11 +12,19 @@ public struct Code: ContentItem {
     let text: String
     let enableHighlight: Bool
     let language: ProgrammingLanguage
+    let font: Font?
+    let textWrap: Bool
 
-    public init(_ language: ProgrammingLanguage = .none, enableHighlight: Bool = true, text: () -> String) {
+    public init(_ language: ProgrammingLanguage = .none,
+                enableHighlight: Bool = true,
+                font: Font? = nil,
+                textWrap: Bool = true,
+                text: () -> String) {
         self.text = text()
         self.enableHighlight = enableHighlight
         self.language = language
+        self.font = font
+        self.textWrap = textWrap
     }
 
     public func buildView(theme: Theme) -> AnyView {
@@ -24,7 +32,11 @@ public struct Code: ContentItem {
         let components = highlighter.highlight(self.text)
 
         return AnyView(
-            CodeView(components: components, enableHighlight: self.enableHighlight, theme: theme)
+            CodeView(components: components,
+                    enableHighlight: self.enableHighlight,
+                    theme: theme,
+                    customFont: self.font,
+                    textWrap: self.textWrap)
         )
     }
 }
@@ -33,22 +45,26 @@ struct CodeView: View {
     let components: [[CodeComponent]]
     let enableHighlight: Bool
     let theme: Theme
+    let customFont: Font?
+    let textWrap: Bool
     let nonEmptyLineIndexes: [Int]
-    
+
     @State var focusedLineIndex: Int?
-    
+
     var focusedLine: Int? {
         guard let index = self.focusedLineIndex else {
             return nil
         }
         return self.nonEmptyLineIndexes[index]
     }
-    
-    init(components: [[CodeComponent]], enableHighlight: Bool, theme: Theme) {
+
+    init(components: [[CodeComponent]], enableHighlight: Bool, theme: Theme, customFont: Font?, textWrap: Bool) {
         self.components = components
         self.enableHighlight = enableHighlight
         self.theme = theme
-        
+        self.customFont = customFont
+        self.textWrap = textWrap
+
         self.nonEmptyLineIndexes = self.components.enumerated().compactMap { (index, line) -> Int? in
             if line.filter({ !$0.isWhitespace }).isEmpty {
                 return nil
@@ -57,16 +73,20 @@ struct CodeView: View {
             }
         }
     }
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            ScrollView {
-                ForEach(Array(self.components.enumerated()), id:\.offset) { index, line in
-                    Text(attributedString(for: line, highlight: isFocused(index)))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.vertical, 1)
-                        .background(isFocused(index) ? self.theme.codeHighlighted.backgroundColor : nil)
+            ScrollView([.horizontal, .vertical]) {
+                VStack(alignment: .leading, spacing: 0) {
+                    ForEach(Array(self.components.enumerated()), id:\.offset) { index, line in
+                        Text(attributedString(for: line, highlight: isFocused(index)))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.vertical, 1)
+                            .background(isFocused(index) ? self.theme.codeHighlighted.backgroundColor : nil)
+                            .fixedSize(horizontal: !self.textWrap, vertical: false)
+                    }
                 }
+                .frame(maxWidth: self.textWrap ? .infinity : nil, alignment: .leading)
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: .keyUp), perform: { _ in
@@ -85,7 +105,12 @@ struct CodeView: View {
         let codeTheme = highlight ? theme.codeHighlighted : theme.code
         var attrStr = AttributedString()
         for component in line {
-            attrStr += codeTheme.text(for: component)
+            var componentStr = codeTheme.text(for: component)
+            // Override font if custom font is provided
+            if let customFont = self.customFont {
+                componentStr.font = customFont
+            }
+            attrStr += componentStr
         }
         return attrStr
     }

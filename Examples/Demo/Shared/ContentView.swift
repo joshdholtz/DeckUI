@@ -268,6 +268,32 @@ extension ContentView {
                 Title("Top alignment")
                 Words("Slides also be top aligned")
             }
+
+            Slide {
+                Title("Custom Font & No Wrap Example")
+                Words("Small font (size 14) and no text wrapping")
+                Code(.swift,
+                     font: Font.system(size: 14, weight: .regular, design: .monospaced),
+                     textWrap: false) {
+                    """
+                    // This is a very long line of code that demonstrates the no-wrap feature - it will require horizontal scrolling to view the entire line instead of wrapping to the next line
+                    let veryLongVariableName = "This is a really long string that would normally wrap to the next line but with textWrap: false it stays on one line"
+
+                    struct ExampleView: View {
+                        @State private var counter = 0
+                        @State private var isPresented = false
+
+                        var body: some View {
+                            VStack {
+                                Text("Counter: \\(counter)")
+                                    .font(.system(size: 60))
+                                Button("Increment") { counter += 1 }
+                            }
+                        }
+                    }
+                    """
+                }
+            }
             
             Slide {
                 Title("Images")

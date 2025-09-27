@@ -105,9 +105,9 @@ public struct Presenter: View {
                     SlideNavigationToolbarButtons()
                 }.opacity(0)
             }
-            
+
             ForEach(Array(self.deck.slides().enumerated()), id: \.offset) { index, slide in
-                
+
                 if index == presentationState.slideIndex {
                     slide.buildView(theme: self.deck.theme)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -115,6 +115,23 @@ public struct Presenter: View {
                 }
             }.transition(presentationState.activeTransition)
         }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            print("🖱️ Mouse click detected - advancing to next slide")
+            // Advance to next slide on click (common clicker behavior)
+            withAnimation {
+                presentationState.nextSlide()
+            }
+        }
+        #if canImport(AppKit)
+        .onTapGesture(count: 2) {
+            print("🖱️ Double click detected - going to previous slide")
+            // Go to previous slide on double-click
+            withAnimation {
+                presentationState.previousSlide()
+            }
+        }
+        #endif
         .navigationTitle(self.deck.title)
         #if canImport(AppKit)
         .if(!self.isFullScreen) {
@@ -129,6 +146,29 @@ public struct Presenter: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: NSWindow.willExitFullScreenNotification)) { _ in
             self.isFullScreen = false
+        }
+        .onAppear {
+            // Set up global keyboard event monitor for debugging
+            NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+                print("⌨️ Key pressed: keyCode=\(event.keyCode), characters='\(event.characters ?? "none")', modifiers=\(event.modifierFlags.rawValue)")
+
+                // Log specific key interpretations
+                switch event.keyCode {
+                case 49: print("   → Space bar detected")
+                case 36: print("   → Return/Enter detected")
+                case 53: print("   → Escape detected")
+                case 48: print("   → Tab detected")
+                case 123: print("   → Left arrow detected")
+                case 124: print("   → Right arrow detected")
+                case 125: print("   → Down arrow detected")
+                case 126: print("   → Up arrow detected")
+                case 116: print("   → Page Up detected")
+                case 121: print("   → Page Down detected")
+                default: break
+                }
+
+                return event
+            }
         }
         #elseif canImport(UIKit)
         .slideNavigationGestures()
